@@ -45,7 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		905F60E41B919E8C00094E52 /* GrabCutIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GrabCutIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		905F60E41B919E8C00094E52 /* FIT1041 GrabCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIT1041 GrabCut.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		905F60E81B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		905F60E91B919E8C00094E52 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		905F60EB1B919E8C00094E52 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 		905F60F21B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		905F60F41B919E8C00094E52 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		905F60F71B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		905F60FD1B919E8C00094E52 /* GrabCutIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GrabCutIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		905F60FD1B919E8C00094E52 /* FIT1041 GrabCut.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FIT1041 GrabCut.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		905F61021B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		905F61031B919E8C00094E52 /* GrabCutIOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GrabCutIOSTests.m; sourceTree = "<group>"; };
 		905F610D1B91A2C800094E52 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
@@ -115,8 +115,8 @@
 		905F60E51B919E8C00094E52 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				905F60E41B919E8C00094E52 /* GrabCutIOS.app */,
-				905F60FD1B919E8C00094E52 /* GrabCutIOSTests.xctest */,
+				905F60E41B919E8C00094E52 /* FIT1041 GrabCut.app */,
+				905F60FD1B919E8C00094E52 /* FIT1041 GrabCut.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -198,9 +198,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		905F60E31B919E8C00094E52 /* GrabCutIOS */ = {
+		905F60E31B919E8C00094E52 /* FIT1041 GrabCut */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 905F61071B919E8C00094E52 /* Build configuration list for PBXNativeTarget "GrabCutIOS" */;
+			buildConfigurationList = 905F61071B919E8C00094E52 /* Build configuration list for PBXNativeTarget "FIT1041 GrabCut" */;
 			buildPhases = (
 				905F60E01B919E8C00094E52 /* Sources */,
 				905F60E11B919E8C00094E52 /* Frameworks */,
@@ -210,14 +210,14 @@
 			);
 			dependencies = (
 			);
-			name = GrabCutIOS;
+			name = "FIT1041 GrabCut";
 			productName = GrabCutIOS;
-			productReference = 905F60E41B919E8C00094E52 /* GrabCutIOS.app */;
+			productReference = 905F60E41B919E8C00094E52 /* FIT1041 GrabCut.app */;
 			productType = "com.apple.product-type.application";
 		};
-		905F60FC1B919E8C00094E52 /* GrabCutIOSTests */ = {
+		905F60FC1B919E8C00094E52 /* FIT1041 GrabCutTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 905F610A1B919E8C00094E52 /* Build configuration list for PBXNativeTarget "GrabCutIOSTests" */;
+			buildConfigurationList = 905F610A1B919E8C00094E52 /* Build configuration list for PBXNativeTarget "FIT1041 GrabCutTests" */;
 			buildPhases = (
 				905F60F91B919E8C00094E52 /* Sources */,
 				905F60FA1B919E8C00094E52 /* Frameworks */,
@@ -228,9 +228,9 @@
 			dependencies = (
 				905F60FF1B919E8C00094E52 /* PBXTargetDependency */,
 			);
-			name = GrabCutIOSTests;
+			name = "FIT1041 GrabCutTests";
 			productName = GrabCutIOSTests;
-			productReference = 905F60FD1B919E8C00094E52 /* GrabCutIOSTests.xctest */;
+			productReference = 905F60FD1B919E8C00094E52 /* FIT1041 GrabCut.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -240,7 +240,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = EunchulJeon;
 				TargetAttributes = {
 					905F60E31B919E8C00094E52 = {
@@ -252,7 +252,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 905F60DF1B919E8C00094E52 /* Build configuration list for PBXProject "GrabCutIOS" */;
+			buildConfigurationList = 905F60DF1B919E8C00094E52 /* Build configuration list for PBXProject "FIT1041 GrabCut" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -265,8 +265,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				905F60E31B919E8C00094E52 /* GrabCutIOS */,
-				905F60FC1B919E8C00094E52 /* GrabCutIOSTests */,
+				905F60E31B919E8C00094E52 /* FIT1041 GrabCut */,
+				905F60FC1B919E8C00094E52 /* FIT1041 GrabCutTests */,
 			);
 		};
 /* End PBXProject section */
@@ -331,7 +331,7 @@
 /* Begin PBXTargetDependency section */
 		905F60FF1B919E8C00094E52 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 905F60E31B919E8C00094E52 /* GrabCutIOS */;
+			target = 905F60E31B919E8C00094E52 /* FIT1041 GrabCut */;
 			targetProxy = 905F60FE1B919E8C00094E52 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -377,6 +377,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -453,7 +454,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "FIT1041 GrabCut";
 				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -474,7 +475,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "FIT1041 GrabCut";
 				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
 			};
 			name = Release;
@@ -493,8 +494,9 @@
 				);
 				INFOPLIST_FILE = GrabCutIOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GrabCutIOS.app/GrabCutIOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "naver.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "FIT1041 GrabCut";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FIT1041 GrabCut.app/FIT1041 GrabCut";
 			};
 			name = Debug;
 		};
@@ -508,15 +510,16 @@
 				);
 				INFOPLIST_FILE = GrabCutIOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GrabCutIOS.app/GrabCutIOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "naver.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "FIT1041 GrabCut";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FIT1041 GrabCut.app/FIT1041 GrabCut";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		905F60DF1B919E8C00094E52 /* Build configuration list for PBXProject "GrabCutIOS" */ = {
+		905F60DF1B919E8C00094E52 /* Build configuration list for PBXProject "FIT1041 GrabCut" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				905F61051B919E8C00094E52 /* Debug */,
@@ -525,7 +528,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		905F61071B919E8C00094E52 /* Build configuration list for PBXNativeTarget "GrabCutIOS" */ = {
+		905F61071B919E8C00094E52 /* Build configuration list for PBXNativeTarget "FIT1041 GrabCut" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				905F61081B919E8C00094E52 /* Debug */,
@@ -534,7 +537,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		905F610A1B919E8C00094E52 /* Build configuration list for PBXNativeTarget "GrabCutIOSTests" */ = {
+		905F610A1B919E8C00094E52 /* Build configuration list for PBXNativeTarget "FIT1041 GrabCutTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				905F610B1B919E8C00094E52 /* Debug */,

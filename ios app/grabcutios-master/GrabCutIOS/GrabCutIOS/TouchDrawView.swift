@@ -105,6 +105,13 @@ import UIKit
         self.setNeedsDisplay()
     }
     
+    func clearForReal() {
+        self.currentState = .None
+        self.plusPath.removeAllPoints()
+        self.minusPath.removeAllPoints()
+        self.setNeedsDisplay()
+    }
+    
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     public override func drawRect(rect: CGRect) {

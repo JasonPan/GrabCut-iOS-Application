@@ -11,7 +11,7 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    let selectedDataFormat: Int = 1
+    let selectedDataFormat: Int = 0
     let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
                                                 (8, "v2_tb2-", "###")]
     
@@ -77,6 +77,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     var i: Int = 1
     var timer0: NSTimer?
     var timer: NSTimer?
+    var cachedMaskImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -257,6 +258,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         if (!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)) {
             self.tapOnMinus("nil")
+//            self.hasSpecifiedLabels = true
             NSLog("processing...s");
             //        [self doGrabcut];
             self.tapOnDoGrabcut("nil")
@@ -501,13 +503,20 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //            resizeImage(touchedMask, size: self.)
 //            self.doGrabcutWithMaskImage(touchedMask)
             if sender as? String == "nil" {
+                
+                if cachedMaskImage == nil {
+                    cachedMaskImage = touchedMask
+//                    self.doGrabcutWithMaskImage(cachedMaskImage!)
+                }
+                
                 print("321: success")
-                self.doGrabcutWithMaskImage(touchedMask)
+//                self.doGrabcutWithMaskImage(touchedMask)
+                self.doGrabcutWithMaskImage(cachedMaskImage!)
+                self.touchDrawView.clearForReal()
             }
 //            self.resultImageView.backgroundColor = UIColor.orangeColor()
             self.hasSpecifiedLabels = true
             
-//            self.touchDrawView.clear()
             self.rectButton.enabled = false
             self.plusButton.enabled = true
             self.minusButton.enabled = true
