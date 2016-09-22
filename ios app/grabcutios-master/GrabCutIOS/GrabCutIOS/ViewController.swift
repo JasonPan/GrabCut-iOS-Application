@@ -9,37 +9,6 @@
 import UIKit
 import MobileCoreServices
 
-//static inline double radians (double degrees) {return degrees * M_PI/180;}
-//const static int MAX_IMAGE_LENGTH = 450;
-extension Int {
-//    var degreesToRadians: Double { return Double(self) * M_PI / 180 }
-//    var radiansToDegrees: Double { return Double(self) * 180 / M_PI }
-    var radians: Double { return Double(self) * M_PI / 180 }
-    var degrees: Double { return Double(self) * 180 / M_PI }
-}
-
-protocol DoubleConvertible {
-    init(_ double: Double)
-    var double: Double { get }
-}
-extension Double : DoubleConvertible { var double: Double { return self         } }
-extension Float  : DoubleConvertible { var double: Double { return Double(self) } }
-extension CGFloat: DoubleConvertible { var double: Double { return Double(self) } }
-
-extension DoubleConvertible {
-    var degreesToRadians: DoubleConvertible {
-        return Self(double * M_PI / 180)
-    }
-    var radiansToDegrees: DoubleConvertible {
-        return Self(double * 180 / M_PI)
-    }
-}
-
-func radians(degrees: Double) -> Double { return degrees * M_PI/180 }
-func radians(degrees: Int) -> Int { return Int(radians(Double(degrees))) }
-func radians(degrees: CGFloat) -> CGFloat { return CGFloat(radians(Double(degrees))) }
-let MAX_IMAGE_LENGTH: CGFloat = 450
-
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
@@ -55,26 +24,24 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     @IBOutlet weak var doGrabcutButton: UIButton!
     var touchState: TouchState = .None
     var grabRect: CGRect = CGRectNull
-//    weak var touchState: TouchState!
-//    weak var grabRect: CGRect!
     var originalImage: UIImage!
     var resizedImage: UIImage!
     var imagePicker: UIImagePickerController?
     
-    var spinner: UIActivityIndicatorView!
-    var dimmedView: UIView!
+    var spinner: UIActivityIndicatorView?
+    var dimmedView: UIView?
     
     var i: Int = 1
     var timer0: NSTimer?
-    var timer: NSTimer!
+    var timer: NSTimer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.grabcut = GrabCutManager()
         
-        self.originalImage = UIImage(named: "test.jpg")
-        self.resizedImage = self.getProperResizedImage(self.originalImage)
+//        self.originalImage = UIImage(named: "test.jpg")
+//        self.resizedImage = self.getProperResizedImage(self.originalImage)
         
         self.initStates()
         
@@ -98,6 +65,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                     
                     
                     while (self.resultImageView.image == nil) {}
+                    while (self.shouldPause) {}
                     self.timer0?.invalidate()
                     
                     dispatch_async(dispatch_get_main_queue(), {
@@ -105,7 +73,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                     })
                     
                     let filename = "test\(i+1).jpeg"
-                    self.testUsingImage(UIImage(named: filename)!)
+//                    self.testUsingImage(UIImage(named: filename)!)
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        self.testUsingImage(UIImage(named: filename)!)
+                    })
                     
                     while (self.resultImageView.image == nil) {}
                     
@@ -115,12 +86,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    
-                    
                     self.i = 1;
                     self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test), userInfo: nil, repeats: true)
-                    })
                 })
+            })
             
             //        for (int i = 0; i < 3; i++) {
             //
@@ -138,31 +107,40 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         //    timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(test) userInfo:nil repeats:true];
     }
     
-    var shouldPause: Bool = false
+    var hasSpecifiedBoundingRect: Bool = false
+//    var hasSpecifiedForegroundLabels: Bool = false
+//    var hasSpecifiedBackgroundLabels: Bool = false
+    var hasSpecifiedLabels: Bool = false
+    var shouldPause: Bool {
+        return !hasSpecifiedBoundingRect || !hasSpecifiedLabels
+    }
 //    var resArr: NSMutableArray!
     var resArr: [UIImage]!
     
-    func test1() {
-        
-        if (shouldPause) {
-            return;
-        }
-        
-        i += 1;
-        
-        if (i > 3) {
-            i = 1;
-        }
-        
-        //    [self tapOnReset:nil];
-        let filename = "test\(i).jpeg"
-        //    [self setImageToTarget:[UIImage imageNamed:filename]];
-        self.testUsingImage(UIImage(named: filename)!)
-    }
+//    func test1() {
+//        
+//        if (shouldPause) {
+//            return;
+//        }
+//        
+//        i += 1;
+//        
+//        if (i > 3) {
+//            i = 1;
+//        }
+//        
+//        //    [self tapOnReset:nil];
+//        let filename = "test\(i).jpeg"
+//        //    [self setImageToTarget:[UIImage imageNamed:filename]];
+//        self.testUsingImage(UIImage(named: filename)!)
+//    }
     
     func test() {
         
+//        let cond: Bool = true//!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect);
         let cond: Bool = !CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect);
+        
+//        print("shouldPause: \(shouldPause)  ||  \(i)  ||  \(self.resArr[i])")
         
         if (shouldPause || !cond) {
             
@@ -181,6 +159,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         if (i > 3) {
             i = 1;
         }
+        
+        
+        print("shouldPause: \(shouldPause)  ||  \(i)  ||  \(self.resArr[i - 1])")
+        
         //
         //    NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i];
         //    [self testUsingImage:[UIImage imageNamed:filename]];
@@ -225,6 +207,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.tapOnRect("nil")
         
         if (!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)) {
+            self.tapOnMinus("nil")
             NSLog("processing...s");
             //        [self doGrabcut];
             self.tapOnDoGrabcut("nil")
@@ -246,11 +229,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         if original.size.width > original.size.height {
             if original.size.width > MAX_IMAGE_LENGTH {
-                return self.resizeWithRotation(original, size: CGSizeMake(MAX_IMAGE_LENGTH, MAX_IMAGE_LENGTH/ratio))
+                return resizeWithRotation(original, size: CGSizeMake(MAX_IMAGE_LENGTH, MAX_IMAGE_LENGTH/ratio))
             }
         }else {
             if original.size.height > MAX_IMAGE_LENGTH {
-                return self.resizeWithRotation(original, size: CGSizeMake(MAX_IMAGE_LENGTH*ratio, MAX_IMAGE_LENGTH))
+                return resizeWithRotation(original, size: CGSizeMake(MAX_IMAGE_LENGTH*ratio, MAX_IMAGE_LENGTH))
             }
         }
         
@@ -273,8 +256,6 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             break
         case .Minus:
             suffix = "Minus"
-            break
-        default:
             break
         }
         
@@ -309,115 +290,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         return CGRectMake(minX, minY, maxX - minX, maxY - minY)
     }
     
-    func resizeImage(image: UIImage, size: CGSize) -> UIImage {
-        UIGraphicsBeginImageContext(size)
-        let context: CGContextRef? = UIGraphicsGetCurrentContext()
-        CGContextTranslateCTM(context, 0.0, size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        
-        CGContextDrawImage(context, CGRectMake(0.0, 0.0, size.width, size.height), image.CGImage)
-        let scaledImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
-    }
-    
-    func resizeWithRotation(sourceImage: UIImage, size targetSize: CGSize) -> UIImage? {
-        let targetWidth: CGFloat = targetSize.width
-        let targetHeight: CGFloat = targetSize.height
-        
-        let imageRef: CGImageRef? = sourceImage.CGImage
-        var bitmapInfo: CGBitmapInfo = CGImageGetBitmapInfo(imageRef)
-        let colorSpaceInfo: CGColorSpaceRef? = CGImageGetColorSpace(imageRef)
-        
-        if bitmapInfo == CGBitmapInfo(rawValue: CGImageAlphaInfo.None.rawValue) {
-            bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.NoneSkipFirst.rawValue)
-        }
-        
-        var bitmap: CGContextRef?
-        
-        if sourceImage.imageOrientation == .Up || sourceImage.imageOrientation == .Down {
-            bitmap = CGBitmapContextCreate(nil, Int(targetWidth), Int(targetHeight), CGImageGetBitsPerComponent(imageRef), CGImageGetBytesPerRow(imageRef), colorSpaceInfo, bitmapInfo.rawValue)
-            
-        } else {
-            bitmap = CGBitmapContextCreate(nil, Int(targetHeight), Int(targetWidth), CGImageGetBitsPerComponent(imageRef), CGImageGetBytesPerRow(imageRef), colorSpaceInfo, bitmapInfo.rawValue)
-            
-        }
-        
-        if sourceImage.imageOrientation == .Left {
-            CGContextRotateCTM (bitmap, radians(90));
-            CGContextTranslateCTM (bitmap, 0, -targetHeight)
-            
-        } else if sourceImage.imageOrientation == .Right {
-            CGContextRotateCTM (bitmap, radians(-90))
-            CGContextTranslateCTM (bitmap, -targetWidth, 0)
-            
-        } else if (sourceImage.imageOrientation == .Up) {
-            // NOTHING
-        } else if (sourceImage.imageOrientation == .Down) {
-            CGContextTranslateCTM (bitmap, targetWidth, targetHeight);
-            CGContextRotateCTM (bitmap, radians(-180));
-        }
-        
-        CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef);
-        if let ref: CGImageRef = CGBitmapContextCreateImage(bitmap) {
-            let newImage = UIImage(CGImage: ref)
-            return newImage;
-        }
-        
-        return nil
-    }
-    
-    func masking(sourceImage: UIImage, mask maskImage: UIImage) -> UIImage? {
-        //Mask Image
-        let maskRef: CGImageRef? = maskImage.CGImage
-        
-        let mask: CGImageRef? = CGImageMaskCreate(CGImageGetWidth(maskRef),
-                                            CGImageGetHeight(maskRef),
-                                            CGImageGetBitsPerComponent(maskRef),
-                                            CGImageGetBitsPerPixel(maskRef),
-                                            CGImageGetBytesPerRow(maskRef),
-                                            CGImageGetDataProvider(maskRef), nil, false);
-        
-        if let masked: CGImageRef = CGImageCreateWithMask(sourceImage.CGImage, mask) {
-            let maskedImage: UIImage = UIImage(CGImage: masked)
-            return maskedImage;
-        }
-        
-        return nil
-    }
-    
-    func getResizeForTimeReduce(image: UIImage) -> CGSize {
-        let ratio: CGFloat = image.size.width / image.size.height
-        
-        if image.size.width > image.size.height {
-            if image.size.width > 400 {
-                return CGSizeMake(400, 400/ratio)
-            }else {
-                return image.size
-            }
-            
-        }else{
-            if image.size.height > 400 {
-                return CGSizeMake(ratio/400, 400)
-            }else {
-                return image.size
-            }
-        }
-    }
-    
-//    -(void) doGrabcut{
-//    [self showLoadingIndicatorView];
-//
-//    __weak typeof(self)weakSelf = self;
-//    }
-    
     func doGrabcut() {
         self.showLoadingIndicatorView()
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             var resultImage: UIImage! = self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
-            resultImage = self.masking(self.originalImage, mask: self.resizeImage(resultImage, size: self.originalImage.size))
+            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
@@ -428,23 +306,24 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         })
     }
     
-//    -(void) doGrabcutWithMaskImage:(UIImage*)image{
-//    [self showLoadingIndicatorView];
-//    
-//    __weak typeof(self)weakSelf = self;
-//    }
-    
     func doGrabcutWithMaskImage(image: UIImage) {
         self.showLoadingIndicatorView()
         
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(self.resizedImage, maskImage: self.resizeImage(image, size:self.resizedImage.size), iterationCount:5)
-            resultImage = self.masking(self.originalImage, mask: self.resizeImage(resultImage, size: self.originalImage.size))
+            
+            let sourceImage = self.resizedImage
+            let maskImage = resizeImage(image, size: self.resizedImage.size)
+            
+            var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(sourceImage, maskImage: maskImage, iterationCount: 5)
+            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
                 self.imageView.alpha = 0.2
                 self.hideLoadingIndicatorView()
+                
+                
+//                self.hasSpecifiedLabels = true
             })
         })
         
@@ -453,7 +332,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         NSLog("began")
         
-        shouldPause = true
+//        shouldPause = true
         
         let touch: UITouch? = touches.first
         self.startPoint = touch?.locationInView(self.imageView)
@@ -503,8 +382,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.minusButton.enabled = false
         self.doGrabcutButton.enabled = false
         
-        self.touchDrawView.clear()
-        self.grabcut.resetManager()
+//        self.plusButton.enabled = true
+//        self.minusButton.enabled = true
+//        self.doGrabcutButton.enabled = false
+        
+//        self.touchDrawView.clear()
+//        self.grabcut.resetManager()
     }
     
     @IBAction func tapOnRect(sender: AnyObject) {
@@ -514,25 +397,31 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.plusButton.enabled = false
         self.minusButton.enabled = false
         self.doGrabcutButton.enabled = true
+        
+//        self.plusButton.enabled = true
+//        self.minusButton.enabled = true
+//        self.doGrabcutButton.enabled = true
     }
     
     @IBAction func tapOnPlus(sender: AnyObject) {
         self.touchState = .Plus
         self.updateStateLabel()
         
-        self.touchDrawView.setCurrentState(.Plus)
+//        self.touchDrawView.setCurrentState(.Plus)
+        self.touchDrawView.currentState = .Plus
     }
     
     @IBAction func tapOnMinus(sender: AnyObject) {
         self.touchState = .Minus
         self.updateStateLabel()
         
-        self.touchDrawView.setCurrentState(.Minus)
+//        self.touchDrawView.setCurrentState(.Minus)
+        self.touchDrawView.currentState = .Minus
     }
     
     @IBAction func tapOnDoGrabcut(sender: AnyObject) {
         
-        shouldPause = false;
+//        shouldPause = false;
         
         if self.touchState == .Rect {
             if self.isUnderMinimumRect() {
@@ -543,6 +432,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 return;
             }
             
+            hasSpecifiedBoundingRect = true
+            
             self.doGrabcut()
             self.touchDrawView.clear()
             
@@ -551,10 +442,21 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             self.minusButton.enabled = true
             self.doGrabcutButton.enabled = false
         }else if self.touchState == .Plus || self.touchState == .Minus {
-            let touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
-            self.doGrabcutWithMaskImage(touchedMask)
             
-            self.touchDrawView.clear()
+//            hasSpecifiedLabels = true
+            
+            let touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
+//            self.resultImageView.image = touchedMask
+//            resizeImage(touchedMask, size: self.)
+//            self.doGrabcutWithMaskImage(touchedMask)
+            if sender as? String == "nil" {
+                print("321: success")
+                self.doGrabcutWithMaskImage(touchedMask)
+            }
+//            self.resultImageView.backgroundColor = UIColor.orangeColor()
+            self.hasSpecifiedLabels = true
+            
+//            self.touchDrawView.clear()
             self.rectButton.enabled = false
             self.plusButton.enabled = true
             self.minusButton.enabled = true
@@ -585,20 +487,20 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     @IBAction func tapOnPhoto(sender: AnyObject) {
         self.startMediaBrowserFromViewController(self, usingDelegate: self)
-        timer.invalidate()
+        timer?.invalidate()
     }
     
     @IBAction func tapOnCamera(sender: AnyObject) {
         self.startCameraControllerFromViewController(self, usingDelegate: self)
-        timer.invalidate()
+        timer?.invalidate()
     }
     
     func setImageToTarget(image: UIImage) {
-        self.originalImage = self.resizeWithRotation(image, size: image.size)
+        self.originalImage = resizeWithRotation(image, size: image.size)
         self.resizedImage = self.getProperResizedImage(self.originalImage)
         self.imageView.image = self.originalImage
         self.initStates()
-        self.grabcut.resetManager()
+//        self.grabcut.resetManager()
     }
     
     func startCameraControllerFromViewController(controller: UIViewController?, usingDelegate delegate: protocol<UIImagePickerControllerDelegate, UINavigationControllerDelegate>?) -> Bool {
@@ -693,7 +595,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         //    _touchState = TouchStateRect;
         self.tapOnRect("nil")
         
+        
         if (!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)) {
+//            self.touchState = .Minus // .Plus Or .Minus, either-or
+            self.tapOnMinus("nil")
             NSLog("processing...s");
             //        [self doGrabcut];
             self.tapOnDoGrabcut("nil")
@@ -718,8 +623,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         }
         
         self.dimmedView = UIView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height))
-        self.dimmedView.backgroundColor = UIColor.init(red:0, green:0, blue:0, alpha:0.7)
-        self.view.addSubview(self.dimmedView)
+        self.dimmedView?.backgroundColor = UIColor.init(red:0, green:0, blue:0, alpha:0.7)
+        self.view.addSubview(self.dimmedView!)
         
         let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: activityIndicatorViewStyle)
         spinner.frame = CGRectSetOrigin(spinner.frame, CGPointMake(floor(CGRectGetMidX(self.view.bounds) - CGRectGetMidX(spinner.bounds)), floor(CGRectGetMidY(self.view.bounds) - CGRectGetMidY(spinner.bounds))));
@@ -732,11 +637,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     func hideLoadingIndicatorView() {
-        self.spinner.stopAnimating()
-        self.spinner.removeFromSuperview()
+        self.spinner?.stopAnimating()
+        self.spinner?.removeFromSuperview()
         self.spinner = nil
         
-        self.dimmedView.removeFromSuperview()
+        self.dimmedView?.removeFromSuperview()
         self.dimmedView = nil
         
         self.view.userInteractionEnabled = true

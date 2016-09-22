@@ -17,13 +17,14 @@ import UIKit
 
 @objc public class TouchDrawView: UIView {
     
-    public var currentState: TouchState!
+//    public var currentState: TouchState!
+    public var currentState: TouchState = .None
     
-    public func setCurrentState(state: TouchState) {
-        self.currentState = state
-    }
+//    public func setCurrentState(state: TouchState) {
+//        self.currentState = state
+//    }
     
-    var pts: [CGPoint]! // we now need to keep track of the four points of a Bezier segment and the first control point of the next segment
+    var pts: [CGPoint] = [CGPoint](count: 5, repeatedValue: CGPointZero) // we now need to keep track of the four points of a Bezier segment and the first control point of the next segment
     var ctr: UInt!
     
     private var rectangle: CGRect!
@@ -98,18 +99,18 @@ import UIKit
     }
     
     func clear() {
-        self.currentState = .None
-        self.plusPath.removeAllPoints()
-        self.minusPath.removeAllPoints()
+//        self.currentState = .None
+//        self.plusPath.removeAllPoints()
+//        self.minusPath.removeAllPoints()
         self.setNeedsDisplay()
     }
     
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     public override func drawRect(rect: CGRect) {
-        guard self.currentState != nil else {
-            return
-        }
+//        guard self.currentState != nil else {
+//            return
+//        }
         
         // Drawing code
         if self.currentState == .Rect {
@@ -123,6 +124,7 @@ import UIKit
             CGContextFillPath(context)
         }else if self.currentState == .Plus || self.currentState == .Minus {
 //        [_incrementalImage drawInRect:rect];
+//            self.incrementalImage.drawInRect(rect)      // VERIFY
             
             UIColor.whiteColor().setStroke()
             self.plusPath.stroke()
