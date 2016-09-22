@@ -104,6 +104,19 @@ cv::Mat bgModel,fgModel; // the models (internally used)
             UInt8 blue  = rawData[byteIndex + 2];
             UInt8 alpha = rawData[byteIndex + 3];
             
+//            if (green > 240) {
+////                red = green = blue = 0;
+////                alpha = 255;
+//                data[width*y + x] = cv::GC_BGD;
+//                countBGD++;
+//
+//            }else if (green == blue == 0) {
+//                countRem++;
+//            }else {
+//                data[width*y + x] = cv::GC_FGD;
+//                countFGD++;
+//            }
+            
             if(red == 255 && green == 255 && blue == 255 && alpha == 255){
                 data[width*y + x] = cv::GC_FGD;
                 countFGD++;

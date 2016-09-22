@@ -109,3 +109,146 @@ func getResizeForTimeReduce(image: UIImage) -> CGSize {
         }
     }
 }
+
+// MARK: - Processing
+
+func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
+    let inputCGImage1    = maskImage1.CGImage
+    let inputCGImage2    = maskImage2.CGImage
+    let colorSpace       = CGColorSpaceCreateDeviceRGB()
+    let width            = CGImageGetWidth(inputCGImage1)
+    let height           = CGImageGetHeight(inputCGImage1)
+    let bytesPerPixel    = 4
+    let bitsPerComponent = 8
+    let bytesPerRow      = bytesPerPixel * width
+    let bitmapInfo       = RGBA32.bitmapInfo
+    
+    guard let context1 = CGBitmapContextCreate(nil, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo) else {
+        print("unable to create context")
+        return nil
+    }
+    
+    guard let context2 = CGBitmapContextCreate(nil, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo) else {
+        print("unable to create context")
+        return nil
+    }
+    
+    CGContextDrawImage(context1, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), inputCGImage1)
+    CGContextDrawImage(context2, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), inputCGImage2)
+    
+    let pixelBuffer1 = UnsafeMutablePointer<RGBA32>(CGBitmapContextGetData(context1))
+    let pixelBuffer2 = UnsafeMutablePointer<RGBA32>(CGBitmapContextGetData(context2))
+    
+    var currentPixel1 = pixelBuffer1
+    var currentPixel2 = pixelBuffer2
+    
+    let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
+    let clear = RGBA32(red: 0, green: 0, blue: 0, alpha: 0)
+    
+    print("a: \(currentPixel1)")
+    print("b: \(currentPixel2)")
+    
+    for _ in 0 ..< Int(height) {
+        for _ in 0 ..< Int(width) {
+            
+//            if currentPixel1.memory == black {
+//                currentPixel1.memory = black
+//            }else if currentPixel1.memory == clear {
+//                currentPixel1.memory = currentPixel2.memory
+//            }else {
+//                currentPixel1.memory = clear
+//            }
+            
+//            print("test74219843:: |\(currentPixel2.memory.red)")
+            if currentPixel2.memory.red < 100 {
+                currentPixel1.memory = black
+            }else {
+//                currentPixel1.memory = clear
+            }
+            currentPixel1 += 1
+            currentPixel2 += 1
+        }
+    }
+    
+    let outputCGImage = CGBitmapContextCreateImage(context1)
+    let outputImage = UIImage(CGImage: outputCGImage!, scale: maskImage1.scale, orientation: maskImage1.imageOrientation)
+    
+    return outputImage
+}
+
+func processPixelsInImage(inputImage: UIImage) -> UIImage? {
+    let inputCGImage     = inputImage.CGImage
+    let colorSpace       = CGColorSpaceCreateDeviceRGB()
+    let width            = CGImageGetWidth(inputCGImage)
+    let height           = CGImageGetHeight(inputCGImage)
+    let bytesPerPixel    = 4
+    let bitsPerComponent = 8
+    let bytesPerRow      = bytesPerPixel * width
+    let bitmapInfo       = RGBA32.bitmapInfo
+    
+    guard let context = CGBitmapContextCreate(nil, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo) else {
+        print("unable to create context")
+        return nil
+    }
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), inputCGImage)
+    
+    let pixelBuffer = UnsafeMutablePointer<RGBA32>(CGBitmapContextGetData(context))
+    
+    var currentPixel = pixelBuffer
+    
+    let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
+//    let red = RGBA32(red: 255, green: 0, blue: 0, alpha: 255)
+//    let green = RGBA32(red: 0, green: 255, blue: 0, alpha: 255)
+//    let white = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
+    let clear = RGBA32(red: 0, green: 0, blue: 0, alpha: 0)
+    
+    for _ in 0 ..< Int(height) {
+        for _ in 0 ..< Int(width) {
+//            if currentPixel.memory == black {
+            
+//            if currentPixel.memory == red {
+            if currentPixel.memory.red < 100 {
+                currentPixel.memory = black
+            }else {
+                currentPixel.memory = clear
+            }
+            currentPixel += 1
+        }
+    }
+    
+    let outputCGImage = CGBitmapContextCreateImage(context)
+    let outputImage = UIImage(CGImage: outputCGImage!, scale: inputImage.scale, orientation: inputImage.imageOrientation)
+    
+    return outputImage
+}
+
+struct RGBA32: Equatable {
+    var color: UInt32
+    
+    var red: UInt8 {
+        return UInt8((color >> 24) & 255)
+    }
+    
+    var green: UInt8 {
+        return UInt8((color >> 16) & 255)
+    }
+    
+    var blue: UInt8 {
+        return UInt8((color >> 8) & 255)
+    }
+    
+    var alpha: UInt8 {
+        return UInt8((color >> 0) & 255)
+    }
+    
+    init(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {
+        color = (UInt32(red) << 24) | (UInt32(green) << 16) | (UInt32(blue) << 8) | (UInt32(alpha) << 0)
+    }
+    
+    static let bitmapInfo = CGImageAlphaInfo.PremultipliedLast.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue
+}
+
+func ==(lhs: RGBA32, rhs: RGBA32) -> Bool {
+    return lhs.color == rhs.color
+}

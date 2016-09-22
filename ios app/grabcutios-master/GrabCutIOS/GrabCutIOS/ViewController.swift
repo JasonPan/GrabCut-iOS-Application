@@ -11,7 +11,9 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    let selectedDataFormat: Int = 0
+    let shouldIsolateGreen: Bool = false
+    
+    let selectedDataFormat: Int = 1
     let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
                                                 (8, "v2_tb2-", "###")]
     
@@ -91,6 +93,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         //    [self testUsingImage:[UIImage imageNamed:@"test1.jpeg"]];
 //        self.testUsingImage(UIImage(named: filename)!)
+        
+        
+        
+//        self.imageView.image = processPixelsInImage(UIImage(named: filename(i))!)
         
         self.testUsingImage(UIImage(named: filename(i))!)
         
@@ -498,13 +504,19 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
 //            hasSpecifiedLabels = true
             
-            let touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
+            var touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
+            
 //            self.resultImageView.image = touchedMask
 //            resizeImage(touchedMask, size: self.)
 //            self.doGrabcutWithMaskImage(touchedMask)
             if sender as? String == "nil" {
                 
                 if cachedMaskImage == nil {
+//                    let touchedMask2: UIImage! = processPixelsInImage(self.originalImage)
+//                    touchedMask = combineMaskImages(touchedMask, maskImage2: touchedMask2)
+                    if shouldIsolateGreen {
+                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
+                    }
                     cachedMaskImage = touchedMask
 //                    self.doGrabcutWithMaskImage(cachedMaskImage!)
                 }
