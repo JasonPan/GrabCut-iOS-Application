@@ -11,6 +11,49 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
+    let selectedDataFormat: Int = 1
+    let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
+                                                (8, "v2_tb2-", "###")]
+    
+//    let numberOfImages = 3
+//    let numberOfImages = 8
+    var numberOfImages: Int {
+        return dataFormats[selectedDataFormat].0
+    }
+    
+    var filenameFormat: String {
+//        let filename = "test\(i).jpeg"
+//        return "test###.jpeg"
+//        return "test\(filenameIndexSpecifier).jpeg"
+//        return "v2_tb2-\(filenameIndexSpecifier).jpeg"
+        return "\(dataFormats[selectedDataFormat].1)\(filenameIndexSpecifier).jpeg"
+    }
+    
+    var filenameIndexSpecifier: String {
+//        return "#"
+//        return "###"
+        return dataFormats[selectedDataFormat].2
+        
+    }
+    
+    func filenameIndexWithIndex(index: Int) -> String {
+//        var retVal = "\(index)"
+//        retVal = String(format: "%02d", index)
+//        
+//        return "###"
+//        let form = "%0\(filenameIndexSpecifier.characters.count)d"
+//        print(form)
+        return String(format: "%0\(filenameIndexSpecifier.characters.count)d", index)
+//        return String(format: form, index)
+    }
+    
+    func filename(index: Int) -> String {
+//        print(filenameIndexWithIndex(index))
+        let retVal = filenameFormat.stringByReplacingOccurrencesOfString(filenameIndexSpecifier, withString: filenameIndexWithIndex(index))
+        print(retVal)
+        return retVal
+    }
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var resultImageView: UIImageView!
     var startPoint: CGPoint!
@@ -46,13 +89,15 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.initStates()
         
         //    [self testUsingImage:[UIImage imageNamed:@"test1.jpeg"]];
-        let filename = "test\(i).jpeg"
-        self.testUsingImage(UIImage(named: filename)!)
+//        self.testUsingImage(UIImage(named: filename)!)
+        
+        self.testUsingImage(UIImage(named: filename(i))!)
         
         
-        //    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
+//            timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
         
         //    timer0 = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
+        timer0 = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test1), userInfo: nil, repeats: true)
 
         if resArr == nil {
             resArr = []
@@ -61,7 +106,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
                 
-                for i in 0 ..< 3 {
+                for i in 0 ..< self.numberOfImages {
                     
                     
                     while (self.resultImageView.image == nil) {}
@@ -72,7 +117,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                         self.resultImageView.image = nil
                     })
                     
-                    let filename = "test\(i+1).jpeg"
+//                    let filename = "test\(i+1).jpeg"
+                    let filename = self.filename(i+1)
 //                    self.testUsingImage(UIImage(named: filename)!)
                     dispatch_sync(dispatch_get_main_queue(), {
                         self.testUsingImage(UIImage(named: filename)!)
@@ -107,6 +153,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         //    timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(test) userInfo:nil repeats:true];
     }
     
+    var hasBegunInteraction: Bool = false
     var hasSpecifiedBoundingRect: Bool = false
 //    var hasSpecifiedForegroundLabels: Bool = false
 //    var hasSpecifiedBackgroundLabels: Bool = false
@@ -117,23 +164,25 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //    var resArr: NSMutableArray!
     var resArr: [UIImage]!
     
-//    func test1() {
-//        
+    func test1() {
+        
+        if hasBegunInteraction {
 //        if (shouldPause) {
-//            return;
-//        }
-//        
-//        i += 1;
-//        
-//        if (i > 3) {
-//            i = 1;
-//        }
-//        
-//        //    [self tapOnReset:nil];
+            return;
+        }
+        
+        i += 1;
+        
+        if (i > numberOfImages) {
+            i = 1;
+        }
+        
+        //    [self tapOnReset:nil];
 //        let filename = "test\(i).jpeg"
-//        //    [self setImageToTarget:[UIImage imageNamed:filename]];
-//        self.testUsingImage(UIImage(named: filename)!)
-//    }
+        let filename = self.filename(i)
+        //    [self setImageToTarget:[UIImage imageNamed:filename]];
+        self.testUsingImage(UIImage(named: filename)!)
+    }
     
     func test() {
         
@@ -156,7 +205,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         i += 1;
         
-        if (i > 3) {
+        if (i > numberOfImages) {
             i = 1;
         }
         
@@ -331,6 +380,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         NSLog("began")
+        
+        hasBegunInteraction = true
         
 //        shouldPause = true
         

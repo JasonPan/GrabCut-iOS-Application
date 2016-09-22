@@ -18,6 +18,14 @@
 		90DE070C1B92A4FA009311B8 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */; };
 		90DE07101B92C371009311B8 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90DE070F1B92C371009311B8 /* test.jpg */; };
 		D60430631D93EE410088260D /* ImageProcessingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60430621D93EE410088260D /* ImageProcessingHelpers.swift */; };
+		D63CC2701D943102004895E9 /* v2_tb2-001.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC2681D943102004895E9 /* v2_tb2-001.jpeg */; };
+		D63CC2711D943102004895E9 /* v2_tb2-002.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC2691D943102004895E9 /* v2_tb2-002.jpeg */; };
+		D63CC2721D943102004895E9 /* v2_tb2-003.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26A1D943102004895E9 /* v2_tb2-003.jpeg */; };
+		D63CC2731D943102004895E9 /* v2_tb2-004.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26B1D943102004895E9 /* v2_tb2-004.jpeg */; };
+		D63CC2741D943102004895E9 /* v2_tb2-005.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26C1D943102004895E9 /* v2_tb2-005.jpeg */; };
+		D63CC2751D943102004895E9 /* v2_tb2-006.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */; };
+		D63CC2761D943102004895E9 /* v2_tb2-007.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */; };
+		D63CC2771D943102004895E9 /* v2_tb2-008.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */; };
 		D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */; };
 		D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F11D93AF3000926C94 /* ViewController.swift */; };
 		D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F31D93B4E000926C94 /* CGRectHelper.swift */; };
@@ -55,6 +63,14 @@
 		90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		90DE070F1B92C371009311B8 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		D60430621D93EE410088260D /* ImageProcessingHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingHelpers.swift; sourceTree = "<group>"; };
+		D63CC2681D943102004895E9 /* v2_tb2-001.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-001.jpeg"; sourceTree = "<group>"; };
+		D63CC2691D943102004895E9 /* v2_tb2-002.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-002.jpeg"; sourceTree = "<group>"; };
+		D63CC26A1D943102004895E9 /* v2_tb2-003.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-003.jpeg"; sourceTree = "<group>"; };
+		D63CC26B1D943102004895E9 /* v2_tb2-004.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-004.jpeg"; sourceTree = "<group>"; };
+		D63CC26C1D943102004895E9 /* v2_tb2-005.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-005.jpeg"; sourceTree = "<group>"; };
+		D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-006.jpeg"; sourceTree = "<group>"; };
+		D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-007.jpeg"; sourceTree = "<group>"; };
+		D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-008.jpeg"; sourceTree = "<group>"; };
 		D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GrabCutIOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDrawView.swift; sourceTree = "<group>"; };
 		D680B5F11D93AF3000926C94 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +135,7 @@
 				905F60F11B919E8C00094E52 /* Main.storyboard */,
 				905F60F41B919E8C00094E52 /* Images.xcassets */,
 				905F60F61B919E8C00094E52 /* LaunchScreen.xib */,
+				D63CC2671D943102004895E9 /* v2_tb2 */,
 				D60430641D93EEC60088260D /* test data */,
 				905F60E71B919E8C00094E52 /* Supporting Files */,
 				D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */,
@@ -161,6 +178,21 @@
 				D6A9612A1D8995AC00EF939C /* test3.jpeg */,
 			);
 			name = "test data";
+			sourceTree = "<group>";
+		};
+		D63CC2671D943102004895E9 /* v2_tb2 */ = {
+			isa = PBXGroup;
+			children = (
+				D63CC2681D943102004895E9 /* v2_tb2-001.jpeg */,
+				D63CC2691D943102004895E9 /* v2_tb2-002.jpeg */,
+				D63CC26A1D943102004895E9 /* v2_tb2-003.jpeg */,
+				D63CC26B1D943102004895E9 /* v2_tb2-004.jpeg */,
+				D63CC26C1D943102004895E9 /* v2_tb2-005.jpeg */,
+				D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */,
+				D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */,
+				D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */,
+			);
+			path = v2_tb2;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,12 +276,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D63CC2701D943102004895E9 /* v2_tb2-001.jpeg in Resources */,
+				D63CC2751D943102004895E9 /* v2_tb2-006.jpeg in Resources */,
+				D63CC2741D943102004895E9 /* v2_tb2-005.jpeg in Resources */,
+				D63CC2731D943102004895E9 /* v2_tb2-004.jpeg in Resources */,
+				D63CC2761D943102004895E9 /* v2_tb2-007.jpeg in Resources */,
 				905F60F31B919E8C00094E52 /* Main.storyboard in Resources */,
+				D63CC2721D943102004895E9 /* v2_tb2-003.jpeg in Resources */,
 				D6A9612D1D8995AC00EF939C /* test3.jpeg in Resources */,
 				905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */,
 				905F60F51B919E8C00094E52 /* Images.xcassets in Resources */,
 				D6A9612C1D8995AC00EF939C /* test2.jpeg in Resources */,
+				D63CC2771D943102004895E9 /* v2_tb2-008.jpeg in Resources */,
 				D6A9612B1D8995AC00EF939C /* test1.jpeg in Resources */,
+				D63CC2711D943102004895E9 /* v2_tb2-002.jpeg in Resources */,
 				90DE07101B92C371009311B8 /* test.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
