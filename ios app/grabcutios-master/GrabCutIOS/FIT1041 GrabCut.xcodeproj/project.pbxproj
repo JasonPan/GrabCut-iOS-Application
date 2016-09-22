@@ -205,6 +205,7 @@
 				905F60E01B919E8C00094E52 /* Sources */,
 				905F60E11B919E8C00094E52 /* Frameworks */,
 				905F60E21B919E8C00094E52 /* Resources */,
+				D63CC2781D944026004895E9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -302,6 +303,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D63CC2781D944026004895E9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nconf=${CONFIGURATION}\narch=${ARCHS:0:4}\n# Only increase the build number on Device and AdHoc/AppStore build\nif [ $conf == \"Release\" ]\nthen\necho \"Bumping bundle version number...\"\nbuildPlist=${INFOPLIST_FILE}\n\nbundleVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.)(\\d+)(\\.\\d+)/$1.($2+1).$3/eg'`\necho $bundleVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $bundleVersion\" \"$buildPlist\"\n\necho \"Bumping bundle short version number...\"\nbundleShortVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.)(\\d+)/$1.($2+1)/eg'`\necho $bundleShortVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleShortVersionString $bundleShortVersion\" \"$buildPlist\"\n\nelse\n\necho \"Bumping bundle version number...\"\nbuildPlist=${INFOPLIST_FILE}\necho \"${INFOPLIST_FILE}\"\n\nbundleVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/$1.($2+1)/eg'`\necho $bundleVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $bundleVersion\" \"$buildPlist\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		905F60E01B919E8C00094E52 /* Sources */ = {
