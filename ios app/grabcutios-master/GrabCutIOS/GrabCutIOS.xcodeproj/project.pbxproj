@@ -9,16 +9,17 @@
 /* Begin PBXBuildFile section */
 		905F60EA1B919E8C00094E52 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60E91B919E8C00094E52 /* main.m */; };
 		905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EC1B919E8C00094E52 /* AppDelegate.m */; };
-		905F60F01B919E8C00094E52 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EF1B919E8C00094E52 /* ViewController.mm */; };
 		905F60F31B919E8C00094E52 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F11B919E8C00094E52 /* Main.storyboard */; };
 		905F60F51B919E8C00094E52 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F41B919E8C00094E52 /* Images.xcassets */; };
 		905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F61B919E8C00094E52 /* LaunchScreen.xib */; };
 		905F61041B919E8C00094E52 /* GrabCutIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61031B919E8C00094E52 /* GrabCutIOSTests.m */; };
 		905F610E1B91A2C800094E52 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 905F610D1B91A2C800094E52 /* opencv2.framework */; };
 		905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
-		905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F61151B91A43B00094E52 /* TouchDrawView.m */; };
 		90DE070C1B92A4FA009311B8 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */; };
 		90DE07101B92C371009311B8 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90DE070F1B92C371009311B8 /* test.jpg */; };
+		D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */; };
+		D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F11D93AF3000926C94 /* ViewController.swift */; };
+		D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F31D93B4E000926C94 /* CGRectHelper.swift */; };
 		D6A9612B1D8995AC00EF939C /* test1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A961281D8995AC00EF939C /* test1.jpeg */; };
 		D6A9612C1D8995AC00EF939C /* test2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A961291D8995AC00EF939C /* test2.jpeg */; };
 		D6A9612D1D8995AC00EF939C /* test3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A9612A1D8995AC00EF939C /* test3.jpeg */; };
@@ -40,8 +41,6 @@
 		905F60E91B919E8C00094E52 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		905F60EB1B919E8C00094E52 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		905F60EC1B919E8C00094E52 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		905F60EE1B919E8C00094E52 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		905F60EF1B919E8C00094E52 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		905F60F21B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		905F60F41B919E8C00094E52 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		905F60F71B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -52,10 +51,12 @@
 		905F61101B91A3B700094E52 /* GrabCutIOSPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GrabCutIOSPrefix.pch; sourceTree = "<group>"; };
 		905F61111B91A43B00094E52 /* GrabCutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabCutManager.h; sourceTree = "<group>"; };
 		905F61121B91A43B00094E52 /* GrabCutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GrabCutManager.mm; sourceTree = "<group>"; };
-		905F61141B91A43B00094E52 /* TouchDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchDrawView.h; sourceTree = "<group>"; };
-		905F61151B91A43B00094E52 /* TouchDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchDrawView.m; sourceTree = "<group>"; };
 		90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		90DE070F1B92C371009311B8 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GrabCutIOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDrawView.swift; sourceTree = "<group>"; };
+		D680B5F11D93AF3000926C94 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D680B5F31D93B4E000926C94 /* CGRectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectHelper.swift; sourceTree = "<group>"; };
 		D6A961281D8995AC00EF939C /* test1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test1.jpeg; sourceTree = "<group>"; };
 		D6A961291D8995AC00EF939C /* test2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test2.jpeg; sourceTree = "<group>"; };
 		D6A9612A1D8995AC00EF939C /* test3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test3.jpeg; sourceTree = "<group>"; };
@@ -108,12 +109,10 @@
 				90DE070F1B92C371009311B8 /* test.jpg */,
 				905F61111B91A43B00094E52 /* GrabCutManager.h */,
 				905F61121B91A43B00094E52 /* GrabCutManager.mm */,
-				905F61141B91A43B00094E52 /* TouchDrawView.h */,
-				905F61151B91A43B00094E52 /* TouchDrawView.m */,
+				D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */,
 				905F60EB1B919E8C00094E52 /* AppDelegate.h */,
 				905F60EC1B919E8C00094E52 /* AppDelegate.m */,
-				905F60EE1B919E8C00094E52 /* ViewController.h */,
-				905F60EF1B919E8C00094E52 /* ViewController.mm */,
+				D680B5F11D93AF3000926C94 /* ViewController.swift */,
 				905F60F11B919E8C00094E52 /* Main.storyboard */,
 				905F60F41B919E8C00094E52 /* Images.xcassets */,
 				905F60F61B919E8C00094E52 /* LaunchScreen.xib */,
@@ -121,6 +120,7 @@
 				D6A961291D8995AC00EF939C /* test2.jpeg */,
 				D6A9612A1D8995AC00EF939C /* test3.jpeg */,
 				905F60E71B919E8C00094E52 /* Supporting Files */,
+				D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */,
 			);
 			path = GrabCutIOS;
 			sourceTree = "<group>";
@@ -128,6 +128,7 @@
 		905F60E71B919E8C00094E52 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D680B5F31D93B4E000926C94 /* CGRectHelper.swift */,
 				905F60E81B919E8C00094E52 /* Info.plist */,
 				905F60E91B919E8C00094E52 /* main.m */,
 			);
@@ -195,6 +196,7 @@
 		905F60DC1B919E8C00094E52 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = EunchulJeon;
 				TargetAttributes = {
@@ -255,10 +257,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */,
 				905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */,
-				905F60F01B919E8C00094E52 /* ViewController.mm in Sources */,
-				905F61181B91A43B00094E52 /* TouchDrawView.m in Sources */,
 				905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */,
+				D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */,
+				D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */,
 				905F60EA1B919E8C00094E52 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -394,10 +398,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -405,6 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -412,10 +419,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
 			};
 			name = Release;
 		};

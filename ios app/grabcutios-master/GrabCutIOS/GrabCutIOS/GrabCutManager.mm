@@ -10,7 +10,19 @@
 #import "GrabCutManager.h"
 #import <opencv2/opencv.hpp>
 
+#import <opencv2/opencv.hpp>
+#import <opencv2/imgproc/imgproc_c.h>
+#import <opencv2/highgui/highgui_c.h>
+#import <opencv2/core/core_c.h>
+using namespace cv;
+
+//@interface GrabCutManager()
+//@end
+
 @implementation GrabCutManager
+
+cv::Mat mask; // segmentation (4 possible values)
+cv::Mat bgModel,fgModel; // the models (internally used)
 
 - (cv::Mat)cvMatFromUIImage:(UIImage *)image
 {
