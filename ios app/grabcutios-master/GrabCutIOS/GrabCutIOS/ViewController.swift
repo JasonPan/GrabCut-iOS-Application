@@ -81,6 +81,21 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     var timer: NSTimer?
     var cachedMaskImage: UIImage?
     
+    func autoselectBoundingRect() {
+        self.tapOnRect(self)
+        self.touchState = .Rect
+        //        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
+        //        let fullRect = self.view.bounds
+        //        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
+        //        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(self.touchDrawView.bounds.width, 300))
+//        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
+        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
+        self.grabRect = fullRect
+        self.touchDrawView.drawRectangle(fullRect)
+        self.tapOnDoGrabcut(self)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -101,10 +116,29 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.testUsingImage(UIImage(named: filename(i))!)
         
         
-//            timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
+//        if currentState == .Rect {
+//            self.rectangle = self.bounds
+//            self.drawRect(self.bounds)
+//            self.setNeedsDisplay()
+//        }
         
-        //    timer0 = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
-        timer0 = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test1), userInfo: nil, repeats: true)
+//        self.tapOnRect(self)
+//        self.touchState = .Rect
+////        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
+////        let fullRect = self.view.bounds
+////        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
+////        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(self.touchDrawView.bounds.width, 300))
+//        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
+//        self.grabRect = fullRect
+//        self.touchDrawView.drawRectangle(fullRect)
+//        self.tapOnDoGrabcut(self)
+        self.autoselectBoundingRect()
+        
+        
+////            timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
+//        
+//        //    timer0 = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
+//        timer0 = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test1), userInfo: nil, repeats: true)
 
         if resArr == nil {
             resArr = []
@@ -570,7 +604,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 self.doGrabcutWithMaskImage(cachedMaskImage!)
                 self.touchDrawView.clearForReal()
             }else {
-                //self.
+                
+                if !self.shouldPause {
+                    self.doGrabcutWithMaskImage(touchedMask)
+                    self.touchDrawView.clearForReal()
+                }
             }
 //            self.resultImageView.backgroundColor = UIColor.orangeColor()
             self.hasSpecifiedLabels = true
@@ -706,6 +744,20 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             self.imagePicker?.dismissViewControllerAnimated(true, completion: nil)
             self.imagePicker = nil
+            
+            
+            
+            
+//            self.tapOnRect(self)
+//            self.touchState = .Rect
+//            //        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
+//            //        let fullRect = self.view.bounds
+////            let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
+//            let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
+//            self.grabRect = fullRect
+//            self.touchDrawView.drawRectangle(fullRect)
+////            self.tapOnDoGrabcut(self)
+            self.autoselectBoundingRect()
         }
         
         if resizedImage != nil {

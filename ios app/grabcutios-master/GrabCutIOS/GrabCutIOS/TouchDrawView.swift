@@ -18,7 +18,15 @@ import UIKit
 @objc public class TouchDrawView: UIView {
     
 //    public var currentState: TouchState!
-    public var currentState: TouchState = .None
+    public var currentState: TouchState = .None {
+        didSet {
+//            if currentState == .Rect {
+//                self.rectangle = self.bounds
+//                self.drawRect(self.bounds)
+//                self.setNeedsDisplay()
+//            }
+        }
+    }
     
 //    public func setCurrentState(state: TouchState) {
 //        self.currentState = state
