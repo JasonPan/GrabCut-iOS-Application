@@ -13,7 +13,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     let shouldIsolateGreen: Bool = false
     
-    let selectedDataFormat: Int = 0
+    let selectedDataFormat: Int = 1
     let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
                                                 (8, "v2_tb2-", "###")]
     
@@ -108,6 +108,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 
         if resArr == nil {
             resArr = []
+            origArr = []
             
             //        [timer invalidate];
             
@@ -120,7 +121,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                     while (self.shouldPause) {}
                     self.timer0?.invalidate()
                     
-                    dispatch_async(dispatch_get_main_queue(), {
+                    dispatch_sync(dispatch_get_main_queue(), {
                         self.resultImageView.image = nil
                     })
                     
@@ -129,6 +130,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //                    self.testUsingImage(UIImage(named: filename)!)
                     dispatch_sync(dispatch_get_main_queue(), {
                         self.testUsingImage(UIImage(named: filename)!)
+                        self.origArr.append(self.originalImage)
                     })
                     
                     while (self.resultImageView.image == nil) {}
@@ -136,6 +138,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                     self.timer0?.invalidate()
                     
                     self.resArr.append(self.resultImageView.image!)
+//                    self.origArr.append(UIImage(named: filename)!)
+                    
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
@@ -170,6 +174,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
 //    var resArr: NSMutableArray!
     var resArr: [UIImage]!
+    var origArr: [UIImage]!
     
     func test1() {
         
@@ -244,9 +249,27 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         //    [self setImageToTarget:[UIImage imageNamed:filename]];
         
         
-        self.setImageToTarget(self.resArr[i - 1])
+        //self.setImageToTarget(self.resArr[i - 1])
+        //self.imageView.backgroundColor = UIColor.whiteColor()
+        //self.resultImageView.image = nil
 //        self.imageView.image = nil
+        
+//        self.imageView.image = self.origArr[i - 1]
+//        self.imageView.alpha = 0.2
+//        self.touchDrawView.clearForReal()
+//        self.imageView.backgroundColor = UIColor.clearColor()
 //        self.resultImageView.image = self.resArr[i - 1]
+        
+//        self.resultImageView.image = self.origArr[i - 1]
+//        self.resultImageView.alpha = 1.0
+//        self.imageView.image = self.resArr[i - 1]
+//        self.imageView.alpha = 1.0
+//        self.imageView.backgroundColor = UIColor.whiteColor()
+//        self.imageView.image = masking(self.origArr[i - 1], mask: self.resArr[i - 1])
+        
+        self.imageView.image = self.origArr[i - 1]
+        self.resultImageView.image = self.resArr[i - 1]
+        self.imageView.alpha = 0.2
     }
     
     func testUsingImage(image: UIImage) {
@@ -360,7 +383,20 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
+//                self.imageView.image = resultImage
+//                self.resultImageView.alpha = 1
+//                self.resultImageView.setNeedsDisplay()
+//                self.touchDrawView.clearForReal()
+//                self.touchDrawView.hidden = true
+//                self.imageView.hidden = true
+//                self.resultImageView.hidden = true
+//                UIImageWriteToSavedPhotosAlbum(self.imageView.image!, nil, nil, nil)
+//                UIImageWriteToSavedPhotosAlbum(resultImage, nil, nil, nil)
                 self.imageView.alpha = 0.2
+//                self.imageView.alpha = 1.0
+                self.resultImageView.backgroundColor = UIColor.redColor()
+//                self.resultImageView.backgroundColor = UIColor.blackColor()
+//                self.resultImageView.alpha = 1.0
                 
                 self.hideLoadingIndicatorView()
             })
@@ -377,7 +413,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             let maskImage = resizeImage(image, size: self.resizedImage.size)
             
             var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(sourceImage, maskImage: maskImage, iterationCount: 5)
-            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+//            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
                 self.imageView.alpha = 0.2
@@ -499,6 +535,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             self.doGrabcut()
             self.touchDrawView.clear()
+            self.touchDrawView.clearForReal()
             
             self.rectButton.enabled = false
             self.plusButton.enabled = true
@@ -509,6 +546,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //            hasSpecifiedLabels = true
             
             var touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
+            //self.imageView.image = touchedMask
+            //self.imageView.backgroundColor = UIColor.redColor()
+            //return
             
 //            self.resultImageView.image = touchedMask
 //            resizeImage(touchedMask, size: self.)
@@ -529,6 +569,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //                self.doGrabcutWithMaskImage(touchedMask)
                 self.doGrabcutWithMaskImage(cachedMaskImage!)
                 self.touchDrawView.clearForReal()
+            }else {
+                //self.
             }
 //            self.resultImageView.backgroundColor = UIColor.orangeColor()
             self.hasSpecifiedLabels = true
@@ -546,6 +588,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         }
         
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//        UIImageWriteToSavedPhotosAlbum(self.imageView.image!, nil, nil, nil)
         
         let alert = UIAlertController(title: "Saved!", message: "Image was saved to photo library.", preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
