@@ -13,7 +13,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     let shouldIsolateGreen: Bool = false
     
-    let selectedDataFormat: Int = 1
+    let selectedDataFormat: Int = 0
     let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
                                                 (8, "v2_tb2-", "###")]
     
@@ -242,7 +242,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.tapOnReset("nil")
         //    NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i];
         //    [self setImageToTarget:[UIImage imageNamed:filename]];
+        
+        
         self.setImageToTarget(self.resArr[i - 1])
+//        self.imageView.image = nil
+//        self.resultImageView.image = self.resArr[i - 1]
     }
     
     func testUsingImage(image: UIImage) {
@@ -654,10 +658,25 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         self.tapOnReset("nil")
         
-        self.setImageToTarget(resultImage)
+        let taskBlock = {
+            self.setImageToTarget(resultImage)
+            
+            self.imagePicker?.dismissViewControllerAnimated(true, completion: nil)
+            self.imagePicker = nil
+        }
         
-        self.imagePicker?.dismissViewControllerAnimated(true, completion: nil)
-        self.imagePicker = nil
+        if resizedImage != nil {
+//            print("passed test 4567382")
+            print("passed test 4567382: \(self.originalImage.size)  ||  \(resultImage.size)")
+            
+            if self.originalImage.size != resultImage.size {
+                print("passed test gfdsa: \(self.originalImage.size)  ||  \(resultImage.size)")
+                taskBlock()
+                return
+            }
+        }
+        
+        taskBlock()
         
         
         //    _grabRect = [self getTouchedRectWithImageSize:_resizedImage.size];
