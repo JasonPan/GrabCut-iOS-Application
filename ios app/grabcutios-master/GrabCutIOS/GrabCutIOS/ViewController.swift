@@ -430,6 +430,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 self.imageView.alpha = 0.2
 //                self.imageView.alpha = 1.0
                 self.resultImageView.backgroundColor = UIColor.redColor()
+//                self.resultImageView.backgroundColor = UIColor.redColor()
 //                self.resultImageView.backgroundColor = UIColor.blackColor()
 //                self.resultImageView.alpha = 1.0
                 

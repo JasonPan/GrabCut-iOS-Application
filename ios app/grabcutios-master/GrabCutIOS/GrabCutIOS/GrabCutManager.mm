@@ -308,7 +308,8 @@ cv::Mat bgModel,fgModel; // the models (internally used)
 //                       cv::Scalar(255,255,255));
     // Generate output image
 //    cv::Mat foreground(img.size(),CV_8UC3, cv::Scalar(255,255,255));
-    cv::Mat foreground(img.size(),CV_8UC3, cv::Scalar(255,0,0));
+//    cv::Mat foreground(img.size(),CV_8UC3, cv::Scalar(255,0,0));
+    cv::Mat foreground(img.size(),CV_8UC3, cv::Scalar(0,0,255));
     
     tempMask=tempMask&1;
     img.copyTo(foreground, tempMask);
