@@ -72,6 +72,52 @@ func resizeWithRotation(sourceImage: UIImage, size targetSize: CGSize) -> UIImag
     return nil
 }
 
+func resizeWithRotation_test(sourceImage: UIImage, rotationImage: UIImage) -> UIImage? {
+    let targetWidth: CGFloat = rotationImage.size.width
+    let targetHeight: CGFloat = rotationImage.size.height
+    
+    let imageRef: CGImageRef? = sourceImage.CGImage
+    var bitmapInfo: CGBitmapInfo = CGImageGetBitmapInfo(imageRef)
+    let colorSpaceInfo: CGColorSpaceRef? = CGImageGetColorSpace(imageRef)
+    
+    if bitmapInfo == CGBitmapInfo(rawValue: CGImageAlphaInfo.None.rawValue) {
+        bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.NoneSkipFirst.rawValue)
+    }
+    
+    var bitmap: CGContextRef?
+    
+    if sourceImage.imageOrientation == .Up || sourceImage.imageOrientation == .Down {
+        bitmap = CGBitmapContextCreate(nil, Int(targetWidth), Int(targetHeight), CGImageGetBitsPerComponent(imageRef), CGImageGetBytesPerRow(imageRef), colorSpaceInfo, bitmapInfo.rawValue)
+        
+    } else {
+        bitmap = CGBitmapContextCreate(nil, Int(targetHeight), Int(targetWidth), CGImageGetBitsPerComponent(imageRef), CGImageGetBytesPerRow(imageRef), colorSpaceInfo, bitmapInfo.rawValue)
+        
+    }
+    
+    if rotationImage.imageOrientation == .Left {
+        CGContextRotateCTM (bitmap, radians(90));
+        CGContextTranslateCTM (bitmap, 0, -targetHeight)
+        
+    } else if rotationImage.imageOrientation == .Right {
+        CGContextRotateCTM (bitmap, radians(-90))
+        CGContextTranslateCTM (bitmap, -targetWidth, 0)
+        
+    } else if (rotationImage.imageOrientation == .Up) {
+        // NOTHING
+    } else if (rotationImage.imageOrientation == .Down) {
+        CGContextTranslateCTM (bitmap, targetWidth, targetHeight);
+        CGContextRotateCTM (bitmap, radians(-180));
+    }
+    
+    CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef);
+    if let ref: CGImageRef = CGBitmapContextCreateImage(bitmap) {
+        let newImage = UIImage(CGImage: ref)
+        return newImage;
+    }
+    
+    return nil
+}
+
 func masking(sourceImage: UIImage, mask maskImage: UIImage) -> UIImage? {
     //Mask Image
     let maskRef: CGImageRef? = maskImage.CGImage

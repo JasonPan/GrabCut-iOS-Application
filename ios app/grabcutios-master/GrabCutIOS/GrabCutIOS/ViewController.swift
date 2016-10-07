@@ -11,8 +11,6 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    let shouldIsolateGreen: Bool = false
-    
     let selectedDataFormat: Int = 1
     let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
                                                 (8, "v2_tb2-", "###")]
@@ -99,6 +97,9 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        print(getDocumentsDirectory().absoluteString)
+        
         self.grabcut = GrabCutManager()
         
 //        self.originalImage = UIImage(named: "test.jpg")
@@ -433,8 +434,46 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //                self.resultImageView.alpha = 1.0
                 
                 self.hideLoadingIndicatorView()
+                
+//                if !self.inAutoMode {
+                
+                    if shouldSaveResults {
+                        
+//                        UIGraphicsBeginImageContextWithOptions(self.resultImageView.image!.size, false, 0.0)
+////                        if let context = UIGraphicsGetCurrentContext() {
+////                            self.resultImageView.layer.renderInContext(context)
+////                            let img: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+////                            UIGraphicsEndImageContext()
+////                            
+////                            
+////                            self.resultImageView.image = img
+////                        }
+////                        
+////                        self.resultImageView.image = nil
+//                        
+//                        let context = UIGraphicsGetCurrentContext()!
+////                        self.resultImageView.layer.renderInContext(context)
+//                        
+//                        let img: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+//                        UIGraphicsEndImageContext()
+//                        self.resultImageView.image = img
+                        
+                        self.resultImageView.image = resultImage.imageWithAlpha(1.0)
+                        
+                        guard let image = self.resultImageView.image else {
+                            return
+                        }
+                        
+//                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                        
+                        
+                        self.saveSampleImage(image)
+                    }
+//                }
             })
         })
+        
+//        shouldSaveResults
     }
     
     func doGrabcutWithMaskImage(image: UIImage) {
@@ -447,7 +486,17 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             let maskImage = resizeImage(image, size: self.resizedImage.size)
             
             var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(sourceImage, maskImage: maskImage, iterationCount: 5)
+            print(self.originalImage.size)
 //            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+//            if !self.inAutoMode {
+                resultImage = resizeImage(resultImage, size: self.originalImage.size)
+                
+//                let testImage = resizeWithRotation(self.originalImage, size: self.originalImage.size)
+//                print(testImage?.size)
+////                resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+//                resultImage = resizeWithRotation(resultImage, size: self.originalImage.size)
+////                resultImage = resizeWithRotation_test(resultImage, rotationImage: self.originalImage)
+//            }
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
                 self.imageView.alpha = 0.2
@@ -455,9 +504,54 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 
                 
 //                self.hasSpecifiedLabels = true
+                
+                
+                if shouldSaveResults {
+                    guard let image = self.resultImageView.image else {
+                        return
+                    }
+                    
+//                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    self.saveSampleImage(image)
+                }
             })
         })
         
+//        shouldSaveResults
+        
+    }
+    
+    func saveSampleImage(image: UIImage) {
+        
+        guard shouldSaveResults == true else {
+            return
+        }
+        
+        let sourceImage: UIImage = colourisedImageWithImage(self.originalImage, colour: UIColor.redColor())
+        let segmentedImage: UIImage = colourisedImageWithImage(image, colour: UIColor.redColor())
+        
+////        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+//        
+//        let filename = randomString(10)
+//        if let data = UIImageJPEGRepresentation(self.originalImage, 0.8) {
+//            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename).png")
+//            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+//        }
+//        
+//        if let data = UIImageJPEGRepresentation(image, 0.8) {
+//            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename)-segmented.png")
+//            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+//        }
+        let filename = randomString(10)
+        if let data = UIImagePNGRepresentation(sourceImage) {
+            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename).png")
+            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+        }
+        
+        if let data = UIImagePNGRepresentation(segmentedImage) {
+            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename)-segmented.png")
+            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -521,6 +615,12 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
 //        self.touchDrawView.clear()
 //        self.grabcut.resetManager()
+        
+        if !inAutoMode {
+            
+            self.touchDrawView.clear()
+            self.grabcut.resetManager()
+        }
     }
     
     @IBAction func tapOnRect(sender: AnyObject) {
@@ -589,7 +689,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //            self.doGrabcutWithMaskImage(touchedMask)
             if sender as? String == "nil" {
                 
-                if cachedMaskImage == nil {
+                if cachedMaskImage == nil || !inAutoMode {
 //                    let touchedMask2: UIImage! = processPixelsInImage(self.originalImage)
 //                    touchedMask = combineMaskImages(touchedMask, maskImage2: touchedMask2)
                     if shouldIsolateGreen {
@@ -653,10 +753,17 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     func setImageToTarget(image: UIImage) {
+        print("target_image_res: \(image.size)")
         self.originalImage = resizeWithRotation(image, size: image.size)
+//        self.originalImage = image
+        print("orig_image_res: \(self.originalImage.size)")
         self.resizedImage = self.getProperResizedImage(self.originalImage)
         self.imageView.image = self.originalImage
         self.initStates()
+        
+        if !inAutoMode {
+            self.grabcut.resetManager()
+        }
 //        self.grabcut.resetManager()
     }
     
@@ -736,6 +843,8 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 resultImage = originalImage
             }
         }
+        
+        inAutoMode = false
         
         self.tapOnReset("nil")
         

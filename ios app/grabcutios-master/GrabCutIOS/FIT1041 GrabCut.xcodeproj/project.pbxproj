@@ -26,6 +26,7 @@
 		D63CC2751D943102004895E9 /* v2_tb2-006.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */; };
 		D63CC2761D943102004895E9 /* v2_tb2-007.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */; };
 		D63CC2771D943102004895E9 /* v2_tb2-008.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */; };
+		D63F0A461DA5AFA1001B9A83 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F0A451DA5AFA1001B9A83 /* Helpers.swift */; };
 		D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */; };
 		D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F11D93AF3000926C94 /* ViewController.swift */; };
 		D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F31D93B4E000926C94 /* CGRectHelper.swift */; };
@@ -71,6 +72,7 @@
 		D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-006.jpeg"; sourceTree = "<group>"; };
 		D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-007.jpeg"; sourceTree = "<group>"; };
 		D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-008.jpeg"; sourceTree = "<group>"; };
+		D63F0A451DA5AFA1001B9A83 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GrabCutIOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDrawView.swift; sourceTree = "<group>"; };
 		D680B5F11D93AF3000926C94 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				905F61121B91A43B00094E52 /* GrabCutManager.mm */,
 				D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */,
 				D680B5F11D93AF3000926C94 /* ViewController.swift */,
+				D63F0A451DA5AFA1001B9A83 /* Helpers.swift */,
 				905F60F11B919E8C00094E52 /* Main.storyboard */,
 				905F60F41B919E8C00094E52 /* Images.xcassets */,
 				D60430621D93EE410088260D /* ImageProcessingHelpers.swift */,
@@ -328,6 +331,7 @@
 				D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */,
 				905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */,
 				905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */,
+				D63F0A461DA5AFA1001B9A83 /* Helpers.swift in Sources */,
 				D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */,
 				D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */,
 				905F60EA1B919E8C00094E52 /* main.m in Sources */,
