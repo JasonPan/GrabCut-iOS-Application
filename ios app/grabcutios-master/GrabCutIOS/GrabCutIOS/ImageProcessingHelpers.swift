@@ -188,6 +188,7 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
     var currentPixel1 = pixelBuffer1
     var currentPixel2 = pixelBuffer2
     
+//    let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
     let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
     let clear = RGBA32(red: 0, green: 0, blue: 0, alpha: 0)
     
@@ -205,18 +206,59 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
 //                currentPixel1.memory = clear
 //            }
             
+            
+            
 //            print("test74219843:: |\(currentPixel2.memory.red)")
-            if currentPixel2.memory.red < 100 {
-                currentPixel1.memory = black
+//            if currentPixel1.memory.green != 0 {
+//                print("test37281974632: |\(currentPixel1.memory)")
+//            }
+//            print("test74219843:: |\(currentPixel2.memory.green)")
+//            print("test74219843:: \(currentPixel2.memory.red)   ||  \(currentPixel2.memory.green) || \(currentPixel2.memory.blue)")
+
+            
+            
+            
+            
+//            if currentPixel2.memory.green > 100 && currentPixel2.memory.red < 150 && currentPixel2.memory.blue < 150 {
+//                currentPixel2.memory = black
+//            }
+            
+            
+//            if currentPixel2.memory.green > 80 && currentPixel2.memory.red < 80 && currentPixel2.memory.blue < 80 {
+//                currentPixel2.memory = black
+//            }
+////            else {
+////                currentPixel2.memory = clear
+////            }
+            
+            // greenDifference = greenChannel - (redChannel + blueChannel)/2;
+//            if currentPixel2.memory.green - ((currentPixel2.memory.red + currentPixel2.memory.blue) / 2) > 0 {
+            
+            let condition = currentPixel2.memory.blue < 150 && currentPixel2.memory.red < 150
+            
+            if CGFloat(currentPixel2.memory.green) - ((CGFloat(currentPixel2.memory.red) + CGFloat(currentPixel2.memory.blue)) / 2) > 0 && condition {
+                currentPixel2.memory = black
+            }else if currentPixel1.memory == black {
+                currentPixel2.memory = black
             }else {
-//                currentPixel1.memory = clear
+                currentPixel2.memory = clear
             }
+            
+            
+            
+            
+            
+//            if currentPixel2.memory.red < 100 {
+//                currentPixel1.memory = black
+//            }else {
+////                currentPixel1.memory = clear
+//            }
             currentPixel1 += 1
             currentPixel2 += 1
         }
     }
     
-    let outputCGImage = CGBitmapContextCreateImage(context1)
+    let outputCGImage = CGBitmapContextCreateImage(context2)
     let outputImage = UIImage(CGImage: outputCGImage!, scale: maskImage1.scale, orientation: maskImage1.imageOrientation)
     
     return outputImage

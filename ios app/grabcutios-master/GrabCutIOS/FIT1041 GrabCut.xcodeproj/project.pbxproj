@@ -477,7 +477,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
 				PRODUCT_NAME = "FIT1041 GrabCut";
 				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};

@@ -476,7 +476,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
 //        shouldSaveResults
     }
-    
+    var count = 0
     func doGrabcutWithMaskImage(image: UIImage) {
         self.showLoadingIndicatorView()
         
@@ -504,8 +504,29 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 self.hideLoadingIndicatorView()
                 
                 
+//                self.grabcut = GrabCutManager()
+                
+//                self.grabcut.resetManager()
+//                self.tapOnRect(self)
+//                self.touchState = .Minus
+//                let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
+//                self.grabRect = fullRect
+//                self.touchDrawView.drawRectangle(fullRect)
+                
+                
 //                self.hasSpecifiedLabels = true
                 
+//                dispatch_sync(dispatch_get_main_queue(), {
+//                    if shouldIsolateGreen && self.count < 1 {
+//                        self.grabcut.resetManager()
+//                        self.count += 1
+//                    }
+//                })
+                
+//                if shouldIsolateGreen && self.count == 0 {
+//                    self.grabcut.resetManager()
+//                    self.count += 1
+//                }
                 
                 if shouldSaveResults {
                     guard let image = self.resultImageView.image else {
@@ -690,23 +711,53 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
 //            self.doGrabcutWithMaskImage(touchedMask)
             if sender as? String == "nil" {
                 
-                if cachedMaskImage == nil || !inAutoMode {
+//                if cachedMaskImage == nil || !inAutoMode {
 //                    let touchedMask2: UIImage! = processPixelsInImage(self.originalImage)
 //                    touchedMask = combineMaskImages(touchedMask, maskImage2: touchedMask2)
                     if shouldIsolateGreen {
                         touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
+//                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.resizedImage)
+                        
+                        self.grabcut.resetManager()
+                        
+                        var resultImage: UIImage! = self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
+                        resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+////                        self.autoselectBoundingRect()
+//                        
+//                        self.tapOnRect(self)
+//                        self.touchState = .Rect
+//                        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
+//                        self.grabRect = fullRect
+//                        self.touchDrawView.drawRectangle(fullRect)
+                        
+//                        self.grabcut = GrabCutManager()
                     }
                     cachedMaskImage = touchedMask
 //                    self.doGrabcutWithMaskImage(cachedMaskImage!)
-                }
+                    
+                    
+////                    self.touchDrawView.clearForReal()
+////                    self.hasSpecifiedLabels = true
+////                    self.resultImageView.image = self.touchDrawView.maskImageWithPainting()
+////                    self.resultImageView.image = colourisedImageWithImage(self.touchDrawView.maskImageWithPainting()!, colour: UIColor.greenColor())
+//                    self.resultImageView.image = cachedMaskImage
+////                self.resultImageView.image = UIImage(named: "v2_tb2-001.jpeg")
+////                self.touchDrawView.clearForReal()
+//                    return
+//                
+////                }
                 
                 print("321: success")
 //                self.doGrabcutWithMaskImage(touchedMask)
                 self.doGrabcutWithMaskImage(cachedMaskImage!)
                 self.touchDrawView.clearForReal()
             }else {
+                print("err3729183")
                 
                 if !self.shouldPause {
+                    if shouldIsolateGreen {
+                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
+                    }
                     self.doGrabcutWithMaskImage(touchedMask)
                     self.touchDrawView.clearForReal()
                 }
@@ -762,7 +813,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.imageView.image = self.originalImage
         self.initStates()
         
-        if !inAutoMode {
+        if !inAutoMode {// || (shouldIsolateGreen && self.originalImage != nil) {
             self.grabcut.resetManager()
         }
 //        self.grabcut.resetManager()
@@ -870,7 +921,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             self.autoselectBoundingRect()
         }
         
-        if resizedImage != nil {
+        if resizedImage != nil && self.originalImage != nil && resultImage != nil {
 //            print("passed test 4567382")
             print("passed test 4567382: \(self.originalImage.size)  ||  \(resultImage.size)")
             

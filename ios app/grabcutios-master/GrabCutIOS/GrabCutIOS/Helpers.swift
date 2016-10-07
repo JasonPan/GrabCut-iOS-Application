@@ -11,7 +11,7 @@ import Foundation
 let shouldSaveResults: Bool = false
 var inAutoMode: Bool = true
 
-let shouldIsolateGreen: Bool = false
+let shouldIsolateGreen: Bool = true
 
 
 
