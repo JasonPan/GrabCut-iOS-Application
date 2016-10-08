@@ -73,8 +73,10 @@ func resizeWithRotation(sourceImage: UIImage, size targetSize: CGSize) -> UIImag
 }
 
 func resizeWithRotation_test(sourceImage: UIImage, rotationImage: UIImage) -> UIImage? {
-    let targetWidth: CGFloat = rotationImage.size.width
-    let targetHeight: CGFloat = rotationImage.size.height
+    //let targetWidth: CGFloat = rotationImage.size.width
+    //let targetHeight: CGFloat = rotationImage.size.height
+    let targetWidth: CGFloat = sourceImage.size.width
+    let targetHeight: CGFloat = sourceImage.size.height
     
     let imageRef: CGImageRef? = sourceImage.CGImage
     var bitmapInfo: CGBitmapInfo = CGImageGetBitmapInfo(imageRef)
@@ -190,6 +192,7 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
     
 //    let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
     let black = RGBA32(red: 0, green: 0, blue: 0, alpha: 255)
+    let white = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
     let clear = RGBA32(red: 0, green: 0, blue: 0, alpha: 0)
     
     print("a: \(currentPixel1)")
@@ -234,11 +237,23 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
             // greenDifference = greenChannel - (redChannel + blueChannel)/2;
 //            if currentPixel2.memory.green - ((currentPixel2.memory.red + currentPixel2.memory.blue) / 2) > 0 {
             
-            let condition = currentPixel2.memory.blue < 150 && currentPixel2.memory.red < 150
             
-            if CGFloat(currentPixel2.memory.green) - ((CGFloat(currentPixel2.memory.red) + CGFloat(currentPixel2.memory.blue)) / 2) > 0 && condition {
+            let red = CGFloat(currentPixel2.memory.red)
+            let green = CGFloat(currentPixel2.memory.green)
+            let blue = CGFloat(currentPixel2.memory.blue)
+            let average = (red + green + blue) / 3
+            
+            let condition = currentPixel2.memory.blue < 150 && currentPixel2.memory.red < 150
+            let saturationCondition = abs(average - red) < 10 || abs(average - green) < 10 || abs(average - blue) < 10
+            
+            if currentPixel1.memory == black {
                 currentPixel2.memory = black
-            }else if currentPixel1.memory == black {
+            }else if currentPixel1.memory == white {
+                currentPixel2.memory = clear
+            }else if saturationCondition && average < 127 && shouldIsolateNeutrals {
+//            }else if saturationCondition && average < 160 {
+                currentPixel2.memory = black
+            }else if green - ((red + blue) / 2) > 0 && condition {
                 currentPixel2.memory = black
             }else {
                 currentPixel2.memory = clear

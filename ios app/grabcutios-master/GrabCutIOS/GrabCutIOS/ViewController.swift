@@ -489,9 +489,21 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(sourceImage, maskImage: maskImage, iterationCount: 5)
             print(self.originalImage.size)
 //            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+            //resultImage = masking(resizeImage(resultImage, size: self.originalImage.size), mask: self.originalImage)
+            
 //            if !self.inAutoMode {
+            
+//            resultImage = resultImage.fixOrientation()
                 resultImage = resizeImage(resultImage, size: self.originalImage.size)
-                
+//            resultImage = resizeWithRotation(resultImage, size: self.originalImage.size)
+            
+            
+            
+            //resultImage = resizeWithRotation_test(resultImage, rotationImage: self.originalImage)
+            
+            
+            
+            
 //                let testImage = resizeWithRotation(self.originalImage, size: self.originalImage.size)
 //                print(testImage?.size)
 ////                resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
@@ -718,36 +730,42 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                         touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
 //                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.resizedImage)
                         
+//                        self.grabcut.resetManager()
                         self.grabcut.resetManager()
-                        
-                        var resultImage: UIImage! = self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
-                        resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
-////                        self.autoselectBoundingRect()
+                        self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
 //                        
-//                        self.tapOnRect(self)
-//                        self.touchState = .Rect
-//                        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
-//                        self.grabRect = fullRect
-//                        self.touchDrawView.drawRectangle(fullRect)
-                        
-//                        self.grabcut = GrabCutManager()
+//                        //var resultImage: UIImage! =
+//                        self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
+//                        //resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
+//////                        self.autoselectBoundingRect()
+////                        
+////                        self.tapOnRect(self)
+////                        self.touchState = .Rect
+////                        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
+////                        self.grabRect = fullRect
+////                        self.touchDrawView.drawRectangle(fullRect)
+//                        
+////                        self.grabcut = GrabCutManager()
                     }
                     cachedMaskImage = touchedMask
 //                    self.doGrabcutWithMaskImage(cachedMaskImage!)
                     
                     
-////                    self.touchDrawView.clearForReal()
-////                    self.hasSpecifiedLabels = true
-////                    self.resultImageView.image = self.touchDrawView.maskImageWithPainting()
-////                    self.resultImageView.image = colourisedImageWithImage(self.touchDrawView.maskImageWithPainting()!, colour: UIColor.greenColor())
+//////                    self.touchDrawView.clearForReal()
+//////                    self.hasSpecifiedLabels = true
+//////                    self.resultImageView.image = self.touchDrawView.maskImageWithPainting()
+//////                    self.resultImageView.image = colourisedImageWithImage(self.touchDrawView.maskImageWithPainting()!, colour: UIColor.greenColor())
 //                    self.resultImageView.image = cachedMaskImage
-////                self.resultImageView.image = UIImage(named: "v2_tb2-001.jpeg")
-////                self.touchDrawView.clearForReal()
+//////                self.resultImageView.image = UIImage(named: "v2_tb2-001.jpeg")
+//////                self.touchDrawView.clearForReal()
 //                    return
-//                
-////                }
+////
+//////                }
+//                self.resultImageView.image = cachedMaskImage
+//                return
+//                print("321: success")
                 
-                print("321: success")
+//                print("321: success")
 //                self.doGrabcutWithMaskImage(touchedMask)
                 self.doGrabcutWithMaskImage(cachedMaskImage!)
                 self.touchDrawView.clearForReal()
@@ -758,6 +776,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                     if shouldIsolateGreen {
                         touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
                     }
+                    
+//                    self.resultImageView.image = touchedMask
+//                    return
+//                    print("321: success")
+                    
                     self.doGrabcutWithMaskImage(touchedMask)
                     self.touchDrawView.clearForReal()
                 }
@@ -806,6 +829,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     func setImageToTarget(image: UIImage) {
         print("target_image_res: \(image.size)")
+        let image = image.fixOrientation()
         self.originalImage = resizeWithRotation(image, size: image.size)
 //        self.originalImage = image
         print("orig_image_res: \(self.originalImage.size)")
