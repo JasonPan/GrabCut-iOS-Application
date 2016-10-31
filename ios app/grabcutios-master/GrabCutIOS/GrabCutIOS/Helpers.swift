@@ -96,6 +96,7 @@ extension UIColor{
     }
 }
 
+// See: http://stackoverflow.com/a/33260568/699963
 extension UIImage {
     
     func fixOrientation() -> UIImage

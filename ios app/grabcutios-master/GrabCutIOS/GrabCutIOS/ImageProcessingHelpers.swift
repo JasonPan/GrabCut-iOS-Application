@@ -12,6 +12,7 @@ func radians(degrees: Double) -> Double { return degrees * M_PI/180 }
 func radians(degrees: Int) -> Int { return Int(radians(Double(degrees))) }
 func radians(degrees: CGFloat) -> CGFloat { return CGFloat(radians(Double(degrees))) }
 let MAX_IMAGE_LENGTH: CGFloat = 450
+//let MAX_IMAGE_LENGTH: CGFloat = 1000
 
 func resizeImage(image: UIImage, size: CGSize) -> UIImage {
     UIGraphicsBeginImageContext(size)
