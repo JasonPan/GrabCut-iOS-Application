@@ -1,4 +1,4 @@
-# FIT1041-Project-2016-GrabCut-iOS-
+# GrabCut iOS Application
 
 This is the iOS application made for my FIT1041 research project at Monash University.
 Performs automated flower segmentation from images of complex natural scenes.
