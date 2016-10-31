@@ -1,9 +1,25 @@
+/*
+ Copyright (c) 2016 Jason Pan
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
 //
-//  ImageProcessingHelpers.swift
-//  GrabCutIOS
+//  Image Utilities.swift
+//  FIT1041 GrabCut
 //
-//  Created by Jason @ Monash on 22/09/2016.
-//  Copyright © 2016 EunchulJeon. All rights reserved.
+//  Created by Jason Pan on 22/09/2016.
+//  Copyright © 2016 Jason Pan. All rights reserved.
 //
 
 import UIKit
@@ -50,7 +66,7 @@ func resizeWithRotation(sourceImage: UIImage, size targetSize: CGSize) -> UIImag
     }
     
     if sourceImage.imageOrientation == .Left {
-        CGContextRotateCTM (bitmap, radians(90));
+        CGContextRotateCTM (bitmap, radians(90))
         CGContextTranslateCTM (bitmap, 0, -targetHeight)
         
     } else if sourceImage.imageOrientation == .Right {
@@ -60,14 +76,14 @@ func resizeWithRotation(sourceImage: UIImage, size targetSize: CGSize) -> UIImag
     } else if (sourceImage.imageOrientation == .Up) {
         // NOTHING
     } else if (sourceImage.imageOrientation == .Down) {
-        CGContextTranslateCTM (bitmap, targetWidth, targetHeight);
-        CGContextRotateCTM (bitmap, radians(-180));
+        CGContextTranslateCTM (bitmap, targetWidth, targetHeight)
+        CGContextRotateCTM (bitmap, radians(-180))
     }
     
-    CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef);
+    CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef)
     if let ref: CGImageRef = CGBitmapContextCreateImage(bitmap) {
         let newImage = UIImage(CGImage: ref)
-        return newImage;
+        return newImage
     }
     
     return nil
@@ -98,7 +114,7 @@ func resizeWithRotation_test(sourceImage: UIImage, rotationImage: UIImage) -> UI
     }
     
     if rotationImage.imageOrientation == .Left {
-        CGContextRotateCTM (bitmap, radians(90));
+        CGContextRotateCTM (bitmap, radians(90))
         CGContextTranslateCTM (bitmap, 0, -targetHeight)
         
     } else if rotationImage.imageOrientation == .Right {
@@ -108,14 +124,14 @@ func resizeWithRotation_test(sourceImage: UIImage, rotationImage: UIImage) -> UI
     } else if (rotationImage.imageOrientation == .Up) {
         // NOTHING
     } else if (rotationImage.imageOrientation == .Down) {
-        CGContextTranslateCTM (bitmap, targetWidth, targetHeight);
-        CGContextRotateCTM (bitmap, radians(-180));
+        CGContextTranslateCTM (bitmap, targetWidth, targetHeight)
+        CGContextRotateCTM (bitmap, radians(-180))
     }
     
-    CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef);
+    CGContextDrawImage(bitmap, CGRectMake(0, 0, targetWidth, targetHeight), imageRef)
     if let ref: CGImageRef = CGBitmapContextCreateImage(bitmap) {
         let newImage = UIImage(CGImage: ref)
-        return newImage;
+        return newImage
     }
     
     return nil
@@ -130,11 +146,11 @@ func masking(sourceImage: UIImage, mask maskImage: UIImage) -> UIImage? {
                                               CGImageGetBitsPerComponent(maskRef),
                                               CGImageGetBitsPerPixel(maskRef),
                                               CGImageGetBytesPerRow(maskRef),
-                                              CGImageGetDataProvider(maskRef), nil, false);
+                                              CGImageGetDataProvider(maskRef), nil, false)
     
     if let masked: CGImageRef = CGImageCreateWithMask(sourceImage.CGImage, mask) {
         let maskedImage: UIImage = UIImage(CGImage: masked)
-        return maskedImage;
+        return maskedImage
     }
     
     return nil
@@ -196,8 +212,8 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
     let white = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
     let clear = RGBA32(red: 0, green: 0, blue: 0, alpha: 0)
     
-    print("a: \(currentPixel1)")
-    print("b: \(currentPixel2)")
+    if shouldLogDebugOutput { print("a: \(currentPixel1)") }
+    if shouldLogDebugOutput { print("b: \(currentPixel2)") }
     
     for _ in 0 ..< Int(height) {
         for _ in 0 ..< Int(width) {
@@ -235,7 +251,7 @@ func combineMaskImages(maskImage1: UIImage, maskImage2: UIImage) -> UIImage? {
 ////                currentPixel2.memory = clear
 ////            }
             
-            // greenDifference = greenChannel - (redChannel + blueChannel)/2;
+            // greenDifference = greenChannel - (redChannel + blueChannel)/2
 //            if currentPixel2.memory.green - ((currentPixel2.memory.red + currentPixel2.memory.blue) / 2) > 0 {
             
             
@@ -355,4 +371,120 @@ struct RGBA32: Equatable {
 
 func ==(lhs: RGBA32, rhs: RGBA32) -> Bool {
     return lhs.color == rhs.color
+}
+
+// See: http://stackoverflow.com/a/37955552/699963
+extension UIImage {
+    
+    func imageWithAlpha(alpha: CGFloat) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        drawAtPoint(CGPointZero, blendMode: .Normal, alpha: alpha)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+    
+}
+
+// See: http://stackoverflow.com/a/34410888/699963
+//func TransperentImageToWhite(image: UIImage) -> UIImage {
+func colourisedImageWithImage(image: UIImage, colour: UIColor) -> UIImage {
+    
+    UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+    let imageRect: CGRect = CGRectMake(0.0, 0.0, image.size.width, image.size.height)
+    let ctx: CGContextRef? = UIGraphicsGetCurrentContext()
+    // Draw a white background (for white mask)
+//    CGContextSetRGBFillColor(ctx, 1.0, 1.0, 1.0, 1.0)
+    CGContextSetRGBFillColor(ctx, colour.red, colour.green, colour.blue, colour.alpha)
+    CGContextFillRect(ctx, imageRect)
+    // Apply the source image's alpha
+    image.drawInRect(imageRect, blendMode: .Normal, alpha: 1.0)
+    let mask: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return mask
+}
+
+// See: http://stackoverflow.com/a/33260568/699963
+extension UIImage {
+    
+    func fixOrientation() -> UIImage
+    {
+        
+        if self.imageOrientation == UIImageOrientation.Up {
+            return self
+        }
+        
+        var transform = CGAffineTransformIdentity
+        
+        switch self.imageOrientation {
+        case .Down, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, self.size.height)
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI))
+            
+        case .Left, .LeftMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, 0)
+            transform = CGAffineTransformRotate(transform, CGFloat(M_PI_2))
+            
+        case .Right, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, self.size.height)
+            transform = CGAffineTransformRotate(transform, CGFloat(-M_PI_2))
+            
+        case .Up, .UpMirrored:
+            break
+        }
+        
+        
+        switch self.imageOrientation {
+            
+        case .UpMirrored, .DownMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.width, 0)
+            transform = CGAffineTransformScale(transform, -1, 1)
+            
+        case .LeftMirrored, .RightMirrored:
+            transform = CGAffineTransformTranslate(transform, self.size.height, 0)
+            transform = CGAffineTransformScale(transform, -1, 1)
+            
+        default:
+            break
+        }
+        
+        
+        
+        // Now we draw the underlying CGImage into a new context, applying the transform
+        // calculated above.
+        let ctx = CGBitmapContextCreate(
+            nil,
+            Int(self.size.width),
+            Int(self.size.height),
+            CGImageGetBitsPerComponent(self.CGImage),
+            0,
+            CGImageGetColorSpace(self.CGImage),
+            UInt32(CGImageGetBitmapInfo(self.CGImage).rawValue)
+        )
+        
+        CGContextConcatCTM(ctx, transform)
+        
+        switch self.imageOrientation {
+            
+        case .Left, .LeftMirrored, .Right, .RightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0, 0, self.size.height,self.size.width), self.CGImage)
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0, 0, self.size.width,self.size.height), self.CGImage)
+            break
+        }
+        
+        // And now we just create a new UIImage from the drawing context
+        let cgimg = CGBitmapContextCreateImage(ctx)
+        
+        let img = UIImage(CGImage: cgimg!)
+        
+        //CGContextRelease(ctx)
+        //CGImageRelease(cgimg)
+        
+        return img
+        
+    }
+    
 }

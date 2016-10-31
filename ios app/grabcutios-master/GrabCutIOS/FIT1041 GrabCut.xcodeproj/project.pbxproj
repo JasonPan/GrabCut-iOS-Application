@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		905F60EA1B919E8C00094E52 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60E91B919E8C00094E52 /* main.m */; };
-		905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 905F60EC1B919E8C00094E52 /* AppDelegate.m */; };
 		905F60F31B919E8C00094E52 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F11B919E8C00094E52 /* Main.storyboard */; };
 		905F60F51B919E8C00094E52 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F41B919E8C00094E52 /* Images.xcassets */; };
 		905F60F81B919E8C00094E52 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 905F60F61B919E8C00094E52 /* LaunchScreen.xib */; };
@@ -17,7 +15,7 @@
 		905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 905F61121B91A43B00094E52 /* GrabCutManager.mm */; };
 		90DE070C1B92A4FA009311B8 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */; };
 		90DE07101B92C371009311B8 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 90DE070F1B92C371009311B8 /* test.jpg */; };
-		D60430631D93EE410088260D /* ImageProcessingHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60430621D93EE410088260D /* ImageProcessingHelpers.swift */; };
+		D60430631D93EE410088260D /* Image Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60430621D93EE410088260D /* Image Utilities.swift */; };
 		D63CC2701D943102004895E9 /* v2_tb2-001.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC2681D943102004895E9 /* v2_tb2-001.jpeg */; };
 		D63CC2711D943102004895E9 /* v2_tb2-002.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC2691D943102004895E9 /* v2_tb2-002.jpeg */; };
 		D63CC2721D943102004895E9 /* v2_tb2-003.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26A1D943102004895E9 /* v2_tb2-003.jpeg */; };
@@ -26,10 +24,14 @@
 		D63CC2751D943102004895E9 /* v2_tb2-006.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */; };
 		D63CC2761D943102004895E9 /* v2_tb2-007.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */; };
 		D63CC2771D943102004895E9 /* v2_tb2-008.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */; };
-		D63F0A461DA5AFA1001B9A83 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F0A451DA5AFA1001B9A83 /* Helpers.swift */; };
+		D63F0A461DA5AFA1001B9A83 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63F0A451DA5AFA1001B9A83 /* Utilities.swift */; };
 		D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */; };
 		D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F11D93AF3000926C94 /* ViewController.swift */; };
 		D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D680B5F31D93B4E000926C94 /* CGRectHelper.swift */; };
+		D6905AF01DC6E00400BD8449 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6905AEF1DC6E00400BD8449 /* TestViewController.swift */; };
+		D6905B101DC6EB9000BD8449 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6905B0F1DC6EB9000BD8449 /* AppDelegate.swift */; };
+		D6905B121DC6FD8400BD8449 /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6905B111DC6FD8400BD8449 /* Options.swift */; };
+		D6905B161DC7042F00BD8449 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6905B151DC7042F00BD8449 /* TestData.swift */; };
 		D6A9612B1D8995AC00EF939C /* test1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A961281D8995AC00EF939C /* test1.jpeg */; };
 		D6A9612C1D8995AC00EF939C /* test2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A961291D8995AC00EF939C /* test2.jpeg */; };
 		D6A9612D1D8995AC00EF939C /* test3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D6A9612A1D8995AC00EF939C /* test3.jpeg */; };
@@ -48,9 +50,6 @@
 /* Begin PBXFileReference section */
 		905F60E41B919E8C00094E52 /* FIT1041 GrabCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIT1041 GrabCut.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		905F60E81B919E8C00094E52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		905F60E91B919E8C00094E52 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		905F60EB1B919E8C00094E52 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		905F60EC1B919E8C00094E52 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		905F60F21B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		905F60F41B919E8C00094E52 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		905F60F71B919E8C00094E52 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -63,7 +62,7 @@
 		905F61121B91A43B00094E52 /* GrabCutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GrabCutManager.mm; sourceTree = "<group>"; };
 		90DE070B1B92A4FA009311B8 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		90DE070F1B92C371009311B8 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
-		D60430621D93EE410088260D /* ImageProcessingHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessingHelpers.swift; sourceTree = "<group>"; };
+		D60430621D93EE410088260D /* Image Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Image Utilities.swift"; sourceTree = "<group>"; };
 		D63CC2681D943102004895E9 /* v2_tb2-001.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-001.jpeg"; sourceTree = "<group>"; };
 		D63CC2691D943102004895E9 /* v2_tb2-002.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-002.jpeg"; sourceTree = "<group>"; };
 		D63CC26A1D943102004895E9 /* v2_tb2-003.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-003.jpeg"; sourceTree = "<group>"; };
@@ -72,11 +71,16 @@
 		D63CC26D1D943102004895E9 /* v2_tb2-006.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-006.jpeg"; sourceTree = "<group>"; };
 		D63CC26E1D943102004895E9 /* v2_tb2-007.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-007.jpeg"; sourceTree = "<group>"; };
 		D63CC26F1D943102004895E9 /* v2_tb2-008.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "v2_tb2-008.jpeg"; sourceTree = "<group>"; };
-		D63F0A451DA5AFA1001B9A83 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		D63F0A451DA5AFA1001B9A83 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GrabCutIOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchDrawView.swift; sourceTree = "<group>"; };
 		D680B5F11D93AF3000926C94 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D680B5F31D93B4E000926C94 /* CGRectHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectHelper.swift; sourceTree = "<group>"; };
+		D6905AEF1DC6E00400BD8449 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		D6905B0F1DC6EB9000BD8449 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D6905B111DC6FD8400BD8449 /* Options.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		D6905B151DC7042F00BD8449 /* TestData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		D6905B191DC72A1800BD8449 /* FIT1041_GrabCut-Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FIT1041_GrabCut-Swift.h"; sourceTree = "<group>"; };
 		D6A961281D8995AC00EF939C /* test1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test1.jpeg; sourceTree = "<group>"; };
 		D6A961291D8995AC00EF939C /* test2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test2.jpeg; sourceTree = "<group>"; };
 		D6A9612A1D8995AC00EF939C /* test3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test3.jpeg; sourceTree = "<group>"; };
@@ -126,22 +130,15 @@
 		905F60E61B919E8C00094E52 /* GrabCutIOS */ = {
 			isa = PBXGroup;
 			children = (
-				90DE070F1B92C371009311B8 /* test.jpg */,
-				905F60EB1B919E8C00094E52 /* AppDelegate.h */,
-				905F60EC1B919E8C00094E52 /* AppDelegate.m */,
-				905F61111B91A43B00094E52 /* GrabCutManager.h */,
-				905F61121B91A43B00094E52 /* GrabCutManager.mm */,
-				D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */,
-				D680B5F11D93AF3000926C94 /* ViewController.swift */,
-				D63F0A451DA5AFA1001B9A83 /* Helpers.swift */,
+				D6905B0F1DC6EB9000BD8449 /* AppDelegate.swift */,
+				D6905B131DC703D200BD8449 /* Core */,
+				D6905B141DC703D600BD8449 /* Test Controller */,
 				905F60F11B919E8C00094E52 /* Main.storyboard */,
 				905F60F41B919E8C00094E52 /* Images.xcassets */,
-				D60430621D93EE410088260D /* ImageProcessingHelpers.swift */,
 				905F60F61B919E8C00094E52 /* LaunchScreen.xib */,
-				D63CC2671D943102004895E9 /* v2_tb2 */,
-				D60430641D93EEC60088260D /* test data */,
 				905F60E71B919E8C00094E52 /* Supporting Files */,
 				D680B5ED1D93A7BD00926C94 /* GrabCutIOS-Bridging-Header.h */,
+				D6905B191DC72A1800BD8449 /* FIT1041_GrabCut-Swift.h */,
 			);
 			path = GrabCutIOS;
 			sourceTree = "<group>";
@@ -151,7 +148,6 @@
 			children = (
 				D680B5F31D93B4E000926C94 /* CGRectHelper.swift */,
 				905F60E81B919E8C00094E52 /* Info.plist */,
-				905F60E91B919E8C00094E52 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -173,14 +169,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D60430641D93EEC60088260D /* test data */ = {
+		D60430641D93EEC60088260D /* sequence 1 */ = {
 			isa = PBXGroup;
 			children = (
 				D6A961281D8995AC00EF939C /* test1.jpeg */,
 				D6A961291D8995AC00EF939C /* test2.jpeg */,
 				D6A9612A1D8995AC00EF939C /* test3.jpeg */,
 			);
-			name = "test data";
+			name = "sequence 1";
 			sourceTree = "<group>";
 		};
 		D63CC2671D943102004895E9 /* v2_tb2 */ = {
@@ -198,6 +194,48 @@
 			path = v2_tb2;
 			sourceTree = "<group>";
 		};
+		D6905AEA1DC6DCF200BD8449 /* Image sequences */ = {
+			isa = PBXGroup;
+			children = (
+				D63CC2671D943102004895E9 /* v2_tb2 */,
+				D60430641D93EEC60088260D /* sequence 1 */,
+			);
+			name = "Image sequences";
+			sourceTree = "<group>";
+		};
+		D6905AEB1DC6DD0100BD8449 /* Test Data */ = {
+			isa = PBXGroup;
+			children = (
+				90DE070F1B92C371009311B8 /* test.jpg */,
+				D6905AEA1DC6DCF200BD8449 /* Image sequences */,
+			);
+			name = "Test Data";
+			sourceTree = "<group>";
+		};
+		D6905B131DC703D200BD8449 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				905F61111B91A43B00094E52 /* GrabCutManager.h */,
+				905F61121B91A43B00094E52 /* GrabCutManager.mm */,
+				D680B5EE1D93A7BD00926C94 /* TouchDrawView.swift */,
+				D680B5F11D93AF3000926C94 /* ViewController.swift */,
+				D6905B151DC7042F00BD8449 /* TestData.swift */,
+				D6905B111DC6FD8400BD8449 /* Options.swift */,
+				D63F0A451DA5AFA1001B9A83 /* Utilities.swift */,
+				D60430621D93EE410088260D /* Image Utilities.swift */,
+				D6905AEB1DC6DD0100BD8449 /* Test Data */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		D6905B141DC703D600BD8449 /* Test Controller */ = {
+			isa = PBXGroup;
+			children = (
+				D6905AEF1DC6E00400BD8449 /* TestViewController.swift */,
+			);
+			name = "Test Controller";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -208,7 +246,8 @@
 				905F60E01B919E8C00094E52 /* Sources */,
 				905F60E11B919E8C00094E52 /* Frameworks */,
 				905F60E21B919E8C00094E52 /* Resources */,
-				D63CC2781D944026004895E9 /* ShellScript */,
+				D63CC2781D944026004895E9 /* Run Script (Automated Versioning) */,
+				D6905B1A1DC72D3800BD8449 /* Run Script (TODO & FIXME tags) */,
 			);
 			buildRules = (
 			);
@@ -245,7 +284,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
-				ORGANIZATIONNAME = EunchulJeon;
+				ORGANIZATIONNAME = "Jason Pan";
 				TargetAttributes = {
 					905F60E31B919E8C00094E52 = {
 						CreatedOnToolsVersion = 6.4;
@@ -308,18 +347,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D63CC2781D944026004895E9 /* ShellScript */ = {
+		D63CC2781D944026004895E9 /* Run Script (Automated Versioning) */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script (Automated Versioning)";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/bash\nconf=${CONFIGURATION}\narch=${ARCHS:0:4}\n# Only increase the build number on Device and AdHoc/AppStore build\nif [ $conf == \"Release\" ]\nthen\necho \"Bumping bundle version number...\"\nbuildPlist=${INFOPLIST_FILE}\n\nbundleVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.)(\\d+)(\\.\\d+)/$1.($2+1).$3/eg'`\necho $bundleVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $bundleVersion\" \"$buildPlist\"\n\necho \"Bumping bundle short version number...\"\nbundleShortVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.)(\\d+)/$1.($2+1)/eg'`\necho $bundleShortVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleShortVersionString $bundleShortVersion\" \"$buildPlist\"\n\nelse\n\necho \"Bumping bundle version number...\"\nbuildPlist=${INFOPLIST_FILE}\necho \"${INFOPLIST_FILE}\"\n\nbundleVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/$1.($2+1)/eg'`\necho $bundleVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $bundleVersion\" \"$buildPlist\"\nfi\n";
+		};
+		D6905B1A1DC72D3800BD8449 /* Run Script (TODO & FIXME tags) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script (TODO & FIXME tags)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -330,12 +384,14 @@
 			files = (
 				D680B5F21D93AF3000926C94 /* ViewController.swift in Sources */,
 				905F61161B91A43B00094E52 /* GrabCutManager.mm in Sources */,
-				905F60ED1B919E8C00094E52 /* AppDelegate.m in Sources */,
-				D63F0A461DA5AFA1001B9A83 /* Helpers.swift in Sources */,
+				D63F0A461DA5AFA1001B9A83 /* Utilities.swift in Sources */,
+				D6905B161DC7042F00BD8449 /* TestData.swift in Sources */,
 				D680B5EF1D93A7BD00926C94 /* TouchDrawView.swift in Sources */,
+				D6905B121DC6FD8400BD8449 /* Options.swift in Sources */,
 				D680B5F41D93B4E000926C94 /* CGRectHelper.swift in Sources */,
-				905F60EA1B919E8C00094E52 /* main.m in Sources */,
-				D60430631D93EE410088260D /* ImageProcessingHelpers.swift in Sources */,
+				D6905AF01DC6E00400BD8449 /* TestViewController.swift in Sources */,
+				D6905B101DC6EB9000BD8449 /* AppDelegate.swift in Sources */,
+				D60430631D93EE410088260D /* Image Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,6 +525,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
@@ -477,6 +534,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
 				PRODUCT_NAME = "FIT1041 GrabCut";
 				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -489,6 +548,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/GrabCutIOSPrefix.pch";
 				INFOPLIST_FILE = GrabCutIOS/Info.plist;
@@ -497,6 +557,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jasonpan.GrabCutIOS.Automated;
 				PRODUCT_NAME = "FIT1041 GrabCut";
 				SWIFT_OBJC_BRIDGING_HEADER = "GrabCutIOS/GrabCutIOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

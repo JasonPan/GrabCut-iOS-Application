@@ -1,9 +1,28 @@
+/*
+ Copyright (c) 2016 Jason Pan
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
 //
 //  ViewController.swift
 //  FIT1041 GrabCut
 //
-//  Created by Jason @ Monash on 22/09/2016.
+//  Created by Jason Pan on 22/09/2016.
 //  Copyright © 2016 Jason Pan. All rights reserved.
+//
+//  Originally written by Eunchul Jeon, Naver Corp.
+//  https://github.com/naver/grabcutios
 //
 
 import UIKit
@@ -11,82 +30,60 @@ import MobileCoreServices
 
 class ViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    let selectedDataFormat: Int = 1
-    let dataFormats: [(Int, String, String)] = [(3, "test", "#"),
-                                                (8, "v2_tb2-", "###")]
-    
-//    let numberOfImages = 3
-//    let numberOfImages = 8
-    var numberOfImages: Int {
-        return dataFormats[selectedDataFormat].0
-    }
-    
-    var filenameFormat: String {
-//        let filename = "test\(i).jpeg"
-//        return "test###.jpeg"
-//        return "test\(filenameIndexSpecifier).jpeg"
-//        return "v2_tb2-\(filenameIndexSpecifier).jpeg"
-        return "\(dataFormats[selectedDataFormat].1)\(filenameIndexSpecifier).jpeg"
-    }
-    
-    var filenameIndexSpecifier: String {
-//        return "#"
-//        return "###"
-        return dataFormats[selectedDataFormat].2
-        
-    }
-    
-    func filenameIndexWithIndex(index: Int) -> String {
-//        var retVal = "\(index)"
-//        retVal = String(format: "%02d", index)
-//        
-//        return "###"
-//        let form = "%0\(filenameIndexSpecifier.characters.count)d"
-//        print(form)
-        return String(format: "%0\(filenameIndexSpecifier.characters.count)d", index)
-//        return String(format: form, index)
-    }
-    
-    func filename(index: Int) -> String {
-//        print(filenameIndexWithIndex(index))
-        let retVal = filenameFormat.stringByReplacingOccurrencesOfString(filenameIndexSpecifier, withString: filenameIndexWithIndex(index))
-        print(retVal)
-        return retVal
-    }
+    //*********************************************************************************************************
+    // MARK: - Instance variables
+    //*********************************************************************************************************
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var resultImageView: UIImageView!
-    var startPoint: CGPoint!
-    var endPoint: CGPoint!
     @IBOutlet weak var touchDrawView: TouchDrawView!
-    var grabcut: GrabCutManager!
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var rectButton: UIButton!
     @IBOutlet weak var plusButton: UIButton!
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var doGrabcutButton: UIButton!
-    var touchState: TouchState = .None
-    var grabRect: CGRect = CGRectNull
+    
+    // Position tracking for drawing the bounding rectangle.
+    var startPoint: CGPoint!
+    var endPoint: CGPoint!
+    
+    // GrabCut and image processing
+    var grabcut: GrabCutManager! // The manager exposes OpenCV GrabCut implementation
+    var touchState: TouchState = .None // Tracks the current touch state i.e. foreground/background labelling, drawing bounding rect, ...
+    var grabRect: CGRect = CGRectNull // Bounding rect
     var originalImage: UIImage!
     var resizedImage: UIImage!
     var imagePicker: UIImagePickerController?
     
+    // Background progressing UI
     var spinner: UIActivityIndicatorView?
     var dimmedView: UIView?
     
+    // Automated GrabCut processing on image sequences (performed on start-up, see TestData.swift for specification details).
     var i: Int = 1
-    var timer0: NSTimer?
     var timer: NSTimer?
     var cachedMaskImage: UIImage?
+    var inAutoMode: Bool = true // Used to detect initial image sequence processing status. (subsequent image selection from the photo library will not allow image sequences, only individual photos).
     
+    var hasBegunInteraction: Bool = false
+    var hasSpecifiedBoundingRect: Bool = false
+    //    var hasSpecifiedForegroundLabels: Bool = false
+    //    var hasSpecifiedBackgroundLabels: Bool = false
+    var hasSpecifiedLabels: Bool = false
+    var shouldPause: Bool {
+        return !hasSpecifiedBoundingRect || !hasSpecifiedLabels
+    }
+    var origArr: [UIImage]! // Contains source images in sequence.
+    var resArr: [UIImage]!  // Contains results from source images in sequence.
+    
+    //*********************************************************************************************************
+    // MARK: - Instance methods (Automated GrabCut processing on image sequences)
+    //*********************************************************************************************************
+    
+    // Automate bounds selection by selecting viewable screen bounds (inc. GrabCut "working space" + 64 pts for nav and status bar)
     func autoselectBoundingRect() {
         self.tapOnRect(self)
         self.touchState = .Rect
-        //        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
-        //        let fullRect = self.view.bounds
-        //        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
-        //        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(self.touchDrawView.bounds.width, 300))
-//        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
         let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
         self.grabRect = fullRect
         self.touchDrawView.drawRectangle(fullRect)
@@ -94,242 +91,143 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        print(getDocumentsDirectory().absoluteString)
-        
-        self.grabcut = GrabCutManager()
-        
-//        self.originalImage = UIImage(named: "test.jpg")
-//        self.resizedImage = self.getProperResizedImage(self.originalImage)
-        
-        self.initStates()
-        
-        //    [self testUsingImage:[UIImage imageNamed:@"test1.jpeg"]];
-//        self.testUsingImage(UIImage(named: filename)!)
-        
-        
-        
-//        self.imageView.image = processPixelsInImage(UIImage(named: filename(i))!)
-        
-        self.testUsingImage(UIImage(named: filename(i))!)
-        
-        
-//        if currentState == .Rect {
-//            self.rectangle = self.bounds
-//            self.drawRect(self.bounds)
-//            self.setNeedsDisplay()
-//        }
-        
-//        self.tapOnRect(self)
-//        self.touchState = .Rect
-////        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
-////        let fullRect = self.view.bounds
-////        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
-////        let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(self.touchDrawView.bounds.width, 300))
-//        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
-//        self.grabRect = fullRect
-//        self.touchDrawView.drawRectangle(fullRect)
-//        self.tapOnDoGrabcut(self)
-        self.autoselectBoundingRect()
-        
-        
-////            timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
-//        
-//        //    timer0 = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(test1) userInfo:nil repeats:true];
-//        timer0 = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test1), userInfo: nil, repeats: true)
-
-        if resArr == nil {
-            resArr = []
-            origArr = []
-            
-            //        [timer invalidate];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                
-                for i in 0 ..< self.numberOfImages {
-                    
-                    
-                    while (self.resultImageView.image == nil) {}
-                    while (self.shouldPause) {}
-                    self.timer0?.invalidate()
-                    
-                    dispatch_sync(dispatch_get_main_queue(), {
-                        self.resultImageView.image = nil
-                    })
-                    
-//                    let filename = "test\(i+1).jpeg"
-                    let filename = self.filename(i+1)
-//                    self.testUsingImage(UIImage(named: filename)!)
-                    dispatch_sync(dispatch_get_main_queue(), {
-                        self.testUsingImage(UIImage(named: filename)!)
-                        self.origArr.append(self.originalImage)
-                    })
-                    
-                    while (self.resultImageView.image == nil) {}
-                    
-                    self.timer0?.invalidate()
-                    
-                    self.resArr.append(self.resultImageView.image!)
-//                    self.origArr.append(UIImage(named: filename)!)
-                    
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.i = 1;
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.test), userInfo: nil, repeats: true)
-                })
-            })
-            
-            //        for (int i = 0; i < 3; i++) {
-            //
-            //            self.resultImageView.image = nil;
-            //
-            //            NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i+1];
-            //            [self testUsingImage:[UIImage imageNamed:filename]];
-            //
-            //            while (self.resultImageView.image == nil) {}
-            //
-            //            [resArr addObject:self.resultImageView.image];
-            //        }
-        }
-        
-        //    timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(test) userInfo:nil repeats:true];
-    }
-    
-    var hasBegunInteraction: Bool = false
-    var hasSpecifiedBoundingRect: Bool = false
-//    var hasSpecifiedForegroundLabels: Bool = false
-//    var hasSpecifiedBackgroundLabels: Bool = false
-    var hasSpecifiedLabels: Bool = false
-    var shouldPause: Bool {
-        return !hasSpecifiedBoundingRect || !hasSpecifiedLabels
-    }
-//    var resArr: NSMutableArray!
-    var resArr: [UIImage]!
-    var origArr: [UIImage]!
-    
-    func test1() {
-        
-        if hasBegunInteraction {
-//        if (shouldPause) {
-            return;
-        }
-        
-        i += 1;
-        
-        if (i > numberOfImages) {
-            i = 1;
-        }
-        
-        //    [self tapOnReset:nil];
-//        let filename = "test\(i).jpeg"
-        let filename = self.filename(i)
-        //    [self setImageToTarget:[UIImage imageNamed:filename]];
-        self.testUsingImage(UIImage(named: filename)!)
-    }
-    
-    func test() {
-        
-//        let cond: Bool = true//!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect);
-        let cond: Bool = !CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect);
-        
-//        print("shouldPause: \(shouldPause)  ||  \(i)  ||  \(self.resArr[i])")
+    func displaySequenceResults() {
+        let cond: Bool = !CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)
         
         if (shouldPause || !cond) {
-            
-            //        //    [self tapOnReset:nil];
-            //        NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i];
-            //        //    [self setImageToTarget:[UIImage imageNamed:filename]];
-            //        [self testUsingImage:[UIImage imageNamed:filename]];
-            
-            return;
+            return
         }
         
-        timer0?.invalidate()
+        i += 1
         
-        i += 1;
-        
-        if (i > numberOfImages) {
-            i = 1;
+        if (i > TestImageSequenceData.numberOfImages) {
+            i = 1
         }
         
         
-        print("shouldPause: \(shouldPause)  ||  \(i)  ||  \(self.resArr[i - 1])")
-        
-        //
-        //    NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i];
-        //    [self testUsingImage:[UIImage imageNamed:filename]];
-        
-        //    if (resArr == NULL) {
-        //        resArr = [NSMutableArray array];
-        //
-        //        for (int i = 0; i < 3; i++) {
-        //
-        //            self.resultImageView.image = nil;
-        //
-        //            NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i+1];
-        //            [self testUsingImage:[UIImage imageNamed:filename]];
-        //
-        //            while (self.resultImageView.image == nil) {}
-        //
-        //            [resArr addObject:self.resultImageView.image];
-        //        }
-        //    }
+        if shouldLogDebugOutput { print("shouldPause: \(shouldPause)  ||  \(i)  ||  \(self.resArr[i - 1])") }
         
         self.tapOnReset("nil")
-        //    NSString *filename = [NSString stringWithFormat:@"test%i.jpeg", i];
-        //    [self setImageToTarget:[UIImage imageNamed:filename]];
-        
-        
-        //self.setImageToTarget(self.resArr[i - 1])
-        //self.imageView.backgroundColor = UIColor.whiteColor()
-        //self.resultImageView.image = nil
-//        self.imageView.image = nil
-        
-//        self.imageView.image = self.origArr[i - 1]
-//        self.imageView.alpha = 0.2
-//        self.touchDrawView.clearForReal()
-//        self.imageView.backgroundColor = UIColor.clearColor()
-//        self.resultImageView.image = self.resArr[i - 1]
-        
-//        self.resultImageView.image = self.origArr[i - 1]
-//        self.resultImageView.alpha = 1.0
-//        self.imageView.image = self.resArr[i - 1]
-//        self.imageView.alpha = 1.0
-//        self.imageView.backgroundColor = UIColor.whiteColor()
-//        self.imageView.image = masking(self.origArr[i - 1], mask: self.resArr[i - 1])
         
         self.imageView.image = self.origArr[i - 1]
         self.resultImageView.image = self.resArr[i - 1]
         self.imageView.alpha = 0.2
     }
     
-    func testUsingImage(image: UIImage) {
+    func performGrabCutForSequenceImage(image: UIImage) {
         
         self.tapOnReset("nil")
         
         self.setImageToTarget(image)
         
-        self.imagePicker?.dismissViewControllerAnimated(true, completion: nil)
-        self.imagePicker = nil
-        
-        
-        //    self.grabRect = [self getTouchedRectWithImageSize:self.resizedImage.size];
-        
-        //    self.grabRect = [self.view frame];
-        //    [self doGrabcut];
-        //    self.touchState = TouchStateRect;
         self.tapOnRect("nil")
         
         if (!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)) {
             self.tapOnMinus("nil")
 //            self.hasSpecifiedLabels = true
-            NSLog("processing...s");
-            //        [self doGrabcut];
+            NSLog("processing image...")
             self.tapOnDoGrabcut("nil")
+        }
+    }
+    
+    //*********************************************************************************************************
+    // MARK: - Testing
+    //*********************************************************************************************************
+    
+    // Save images for debugging / testing / viewing
+    func saveSampleImage(image: UIImage) {
+        
+        guard shouldSaveResults == true else {
+            return
+        }
+        
+        let sourceImage: UIImage = colourisedImageWithImage(self.originalImage, colour: UIColor.redColor())
+        let segmentedImage: UIImage = colourisedImageWithImage(image, colour: UIColor.redColor())
+        
+        let filename = randomString(10)
+        if let data = UIImagePNGRepresentation(sourceImage) {
+            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename).png")
+            let _ = try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+        }
+        
+        if let data = UIImagePNGRepresentation(segmentedImage) {
+            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename)-segmented.png")
+            let _ = try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
+        }
+    }
+    
+    //*********************************************************************************************************
+    // MARK: - Instance methods
+    //*********************************************************************************************************
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        
+        print("Debug sample image data will be output to:\n   \(getDocumentsDirectory().absoluteString)\n\n")
+        
+        // Initialize the GrabCut manager
+        self.grabcut = GrabCutManager()
+        
+        self.initStates()
+        
+        // Set up initial segmentation of image sequence objects.
+        self.performGrabCutForSequenceImage(UIImage(named: TestImageSequenceData.filename(i))!)
+        
+        // Automatically select a bounding rect (~~view size, can't be complete bounds since GrabCut requires "working room")
+        self.autoselectBoundingRect()
+        
+        // Carry out appropriate UI updates automatically (since this is a sequence).
+        self.tapOnMinus(self)
+        self.touchDrawView.touchStarted(CGPointZero)
+        self.touchDrawView.touchEnded(CGPointZero)
+        self.doGrabcutButton.enabled = true
+        
+        // Load and process sequence images
+        if resArr == nil {
+            resArr = []
+            origArr = []
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                
+                for i in 0 ..< TestImageSequenceData.numberOfImages {
+                    
+                    while (self.resultImageView.image == nil) {}
+                    while (self.shouldPause) {}
+                    
+                    guard self.inAutoMode == true else {
+                        return
+                    }
+                    
+                    dispatch_sync(dispatch_get_main_queue(), {
+                        self.resultImageView.image = nil
+                        
+                        let filename = TestImageSequenceData.filename(i+1)
+                        if self.inAutoMode {
+                            self.performGrabCutForSequenceImage(UIImage(named: filename)!)
+                            self.origArr.append(self.originalImage)
+                        }
+                    })
+                    
+                    while (self.resultImageView.image == nil) {}
+                    
+                    if self.inAutoMode {
+                        self.resArr.append(self.resultImageView.image!)
+                    }
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    
+                    if self.inAutoMode {
+                        self.touchDrawView.clearForReal() // Clear any labelling that was done.
+                        
+                        self.i = 1 // Start at image with sequence index 1.
+                        
+                        // This will loop through all results from images in sequence.
+                        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(self.displaySequenceResults), userInfo: nil, repeats: true)
+                    }
+                })
+            })
         }
     }
     
@@ -360,7 +258,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     func getTouchStateToString() -> String {
-        let state: String = "Touch State : ";
+        let state: String = "Touch State : "
         var suffix: String
         
         switch self.touchState {
@@ -401,10 +299,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     func getTouchedRect(startPoint: CGPoint, endPoint: CGPoint, widthScale: CGFloat, heightScale: CGFloat) -> CGRect {
-        let minX: CGFloat = startPoint.x > endPoint.x ? endPoint.x*widthScale : startPoint.x*widthScale;
-        let maxX: CGFloat = startPoint.x < endPoint.x ? endPoint.x*widthScale : startPoint.x*widthScale;
-        let minY: CGFloat = startPoint.y > endPoint.y ? endPoint.y*heightScale : startPoint.y*heightScale;
-        let maxY: CGFloat = startPoint.y < endPoint.y ? endPoint.y*heightScale : startPoint.y*heightScale;
+        let minX: CGFloat = startPoint.x > endPoint.x ? endPoint.x*widthScale : startPoint.x*widthScale
+        let maxX: CGFloat = startPoint.x < endPoint.x ? endPoint.x*widthScale : startPoint.x*widthScale
+        let minY: CGFloat = startPoint.y > endPoint.y ? endPoint.y*heightScale : startPoint.y*heightScale
+        let maxY: CGFloat = startPoint.y < endPoint.y ? endPoint.y*heightScale : startPoint.y*heightScale
         
         return CGRectMake(minX, minY, maxX - minX, maxY - minY)
     }
@@ -418,68 +316,28 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
-//                self.imageView.image = resultImage
-//                self.resultImageView.alpha = 1
-//                self.resultImageView.setNeedsDisplay()
-//                self.touchDrawView.clearForReal()
-//                self.touchDrawView.hidden = true
-//                self.imageView.hidden = true
-//                self.resultImageView.hidden = true
-//                UIImageWriteToSavedPhotosAlbum(self.imageView.image!, nil, nil, nil)
-//                UIImageWriteToSavedPhotosAlbum(resultImage, nil, nil, nil)
                 self.imageView.alpha = 0.2
-//                self.imageView.alpha = 1.0
                 self.resultImageView.backgroundColor = UIColor.redColor()
-//                self.resultImageView.backgroundColor = UIColor.redColor()
-//                self.resultImageView.backgroundColor = UIColor.blackColor()
-//                self.resultImageView.alpha = 1.0
                 
                 self.hideLoadingIndicatorView()
                 
-//                if !self.inAutoMode {
-                
-                    if shouldSaveResults {
-                        
-//                        UIGraphicsBeginImageContextWithOptions(self.resultImageView.image!.size, false, 0.0)
-////                        if let context = UIGraphicsGetCurrentContext() {
-////                            self.resultImageView.layer.renderInContext(context)
-////                            let img: UIImage = UIGraphicsGetImageFromCurrentImageContext()
-////                            UIGraphicsEndImageContext()
-////                            
-////                            
-////                            self.resultImageView.image = img
-////                        }
-////                        
-////                        self.resultImageView.image = nil
-//                        
-//                        let context = UIGraphicsGetCurrentContext()!
-////                        self.resultImageView.layer.renderInContext(context)
-//                        
-//                        let img: UIImage = UIGraphicsGetImageFromCurrentImageContext()
-//                        UIGraphicsEndImageContext()
-//                        self.resultImageView.image = img
-                        
-                        self.resultImageView.image = resultImage.imageWithAlpha(1.0)
-                        
-                        guard let image = self.resultImageView.image else {
-                            return
-                        }
-                        
-//                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                        
-                        
-                        self.saveSampleImage(image)
+                if shouldSaveResults {
+                    
+                    self.resultImageView.image = resultImage.imageWithAlpha(1.0)
+                    
+                    guard let image = self.resultImageView.image else {
+                        return
                     }
-//                }
+                    
+                    // Output results to disk for debugging / testing.
+                    self.saveSampleImage(image)
+                }
             })
         })
-        
-//        shouldSaveResults
     }
     var count = 0
     func doGrabcutWithMaskImage(image: UIImage) {
         self.showLoadingIndicatorView()
-        
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             
@@ -487,105 +345,26 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             let maskImage = resizeImage(image, size: self.resizedImage.size)
             
             var resultImage: UIImage! = self.grabcut.doGrabCutWithMask(sourceImage, maskImage: maskImage, iterationCount: 5)
-            print(self.originalImage.size)
-//            resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
-            //resultImage = masking(resizeImage(resultImage, size: self.originalImage.size), mask: self.originalImage)
+            if shouldLogDebugOutput { print(self.originalImage.size) }
             
-//            if !self.inAutoMode {
+            resultImage = resizeImage(resultImage, size: self.originalImage.size)
             
-//            resultImage = resultImage.fixOrientation()
-                resultImage = resizeImage(resultImage, size: self.originalImage.size)
-//            resultImage = resizeWithRotation(resultImage, size: self.originalImage.size)
-            
-            
-            
-            //resultImage = resizeWithRotation_test(resultImage, rotationImage: self.originalImage)
-            
-            
-            
-            
-//                let testImage = resizeWithRotation(self.originalImage, size: self.originalImage.size)
-//                print(testImage?.size)
-////                resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
-//                resultImage = resizeWithRotation(resultImage, size: self.originalImage.size)
-////                resultImage = resizeWithRotation_test(resultImage, rotationImage: self.originalImage)
-//            }
             dispatch_async(dispatch_get_main_queue(), {
                 self.resultImageView.image = resultImage
                 self.imageView.alpha = 0.2
                 self.hideLoadingIndicatorView()
-                
-                
-//                self.grabcut = GrabCutManager()
-                
-//                self.grabcut.resetManager()
-//                self.tapOnRect(self)
-//                self.touchState = .Minus
-//                let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
-//                self.grabRect = fullRect
-//                self.touchDrawView.drawRectangle(fullRect)
-                
-                
-//                self.hasSpecifiedLabels = true
-                
-//                dispatch_sync(dispatch_get_main_queue(), {
-//                    if shouldIsolateGreen && self.count < 1 {
-//                        self.grabcut.resetManager()
-//                        self.count += 1
-//                    }
-//                })
-                
-//                if shouldIsolateGreen && self.count == 0 {
-//                    self.grabcut.resetManager()
-//                    self.count += 1
-//                }
                 
                 if shouldSaveResults {
                     guard let image = self.resultImageView.image else {
                         return
                     }
                     
-//                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    // Output results to disk for debugging / testing.
                     self.saveSampleImage(image)
                 }
             })
         })
         
-//        shouldSaveResults
-        
-    }
-    
-    func saveSampleImage(image: UIImage) {
-        
-        guard shouldSaveResults == true else {
-            return
-        }
-        
-        let sourceImage: UIImage = colourisedImageWithImage(self.originalImage, colour: UIColor.redColor())
-        let segmentedImage: UIImage = colourisedImageWithImage(image, colour: UIColor.redColor())
-        
-////        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-//        
-//        let filename = randomString(10)
-//        if let data = UIImageJPEGRepresentation(self.originalImage, 0.8) {
-//            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename).png")
-//            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
-//        }
-//        
-//        if let data = UIImageJPEGRepresentation(image, 0.8) {
-//            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename)-segmented.png")
-//            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
-//        }
-        let filename = randomString(10)
-        if let data = UIImagePNGRepresentation(sourceImage) {
-            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename).png")
-            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
-        }
-        
-        if let data = UIImagePNGRepresentation(segmentedImage) {
-            let filename = getDocumentsDirectory().URLByAppendingPathComponent("\(filename)-segmented.png")
-            try? data.writeToURL(filename, options: NSDataWritingOptions(rawValue: 0))
-        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -688,7 +467,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     
     @IBAction func tapOnDoGrabcut(sender: AnyObject) {
         
-//        shouldPause = false;
+//        shouldPause = false
         
         if self.touchState == .Rect {
             if self.isUnderMinimumRect() {
@@ -696,7 +475,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
                 alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                 self.presentViewController(alert, animated: true, completion: nil)
                 
-                return;
+                return
             }
             
             hasSpecifiedBoundingRect = true
@@ -711,69 +490,29 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             self.doGrabcutButton.enabled = false
         }else if self.touchState == .Plus || self.touchState == .Minus {
             
-//            hasSpecifiedLabels = true
-            
             var touchedMask: UIImage! = self.touchDrawView.maskImageWithPainting()
-            //self.imageView.image = touchedMask
-            //self.imageView.backgroundColor = UIColor.redColor()
-            //return
             
-//            self.resultImageView.image = touchedMask
-//            resizeImage(touchedMask, size: self.)
-//            self.doGrabcutWithMaskImage(touchedMask)
             if sender as? String == "nil" {
                 
-//                if cachedMaskImage == nil || !inAutoMode {
-//                    let touchedMask2: UIImage! = processPixelsInImage(self.originalImage)
-//                    touchedMask = combineMaskImages(touchedMask, maskImage2: touchedMask2)
-                    if shouldIsolateGreen {
-                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
-//                        touchedMask = combineMaskImages(touchedMask, maskImage2: self.resizedImage)
-                        
-//                        self.grabcut.resetManager()
-                        self.grabcut.resetManager()
-                        self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
-//                        
-//                        //var resultImage: UIImage! =
-//                        self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
-//                        //resultImage = masking(self.originalImage, mask: resizeImage(resultImage, size: self.originalImage.size))
-//////                        self.autoselectBoundingRect()
-////                        
-////                        self.tapOnRect(self)
-////                        self.touchState = .Rect
-////                        let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(self.touchDrawView.bounds.width, self.touchDrawView.bounds.height+64))
-////                        self.grabRect = fullRect
-////                        self.touchDrawView.drawRectangle(fullRect)
-//                        
-////                        self.grabcut = GrabCutManager()
-                    }
-                    cachedMaskImage = touchedMask
-//                    self.doGrabcutWithMaskImage(cachedMaskImage!)
+                if shouldIsolateGreen {
                     
+                    // Combines user labelling with automated green labelling.
+                    touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
                     
-//////                    self.touchDrawView.clearForReal()
-//////                    self.hasSpecifiedLabels = true
-//////                    self.resultImageView.image = self.touchDrawView.maskImageWithPainting()
-//////                    self.resultImageView.image = colourisedImageWithImage(self.touchDrawView.maskImageWithPainting()!, colour: UIColor.greenColor())
-//                    self.resultImageView.image = cachedMaskImage
-//////                self.resultImageView.image = UIImage(named: "v2_tb2-001.jpeg")
-//////                self.touchDrawView.clearForReal()
-//                    return
-////
-//////                }
-//                self.resultImageView.image = cachedMaskImage
-//                return
-//                print("321: success")
+                    self.grabcut.resetManager()
+                    self.grabcut.doGrabCut(self.resizedImage, foregroundBound: self.grabRect, iterationCount: 5)
+                }
                 
-//                print("321: success")
-//                self.doGrabcutWithMaskImage(touchedMask)
+                cachedMaskImage = touchedMask
                 self.doGrabcutWithMaskImage(cachedMaskImage!)
-                self.touchDrawView.clearForReal()
+//                self.touchDrawView.clearForReal()
             }else {
-                print("err3729183")
                 
-                if !self.shouldPause {
+                if !self.shouldPause || !inAutoMode {
+                    
                     if shouldIsolateGreen {
+                        
+                        // Combines user labelling with automated green labelling.
                         touchedMask = combineMaskImages(touchedMask, maskImage2: self.originalImage)
                     }
                     
@@ -828,11 +567,11 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
     }
     
     func setImageToTarget(image: UIImage) {
-        print("target_image_res: \(image.size)")
+        if shouldLogDebugOutput { print("target_image_res: \(image.size)") }
         let image = image.fixOrientation()
         self.originalImage = resizeWithRotation(image, size: image.size)
 //        self.originalImage = image
-        print("orig_image_res: \(self.originalImage.size)")
+        if shouldLogDebugOutput { print("orig_image_res: \(self.originalImage.size)") }
         self.resizedImage = self.getProperResizedImage(self.originalImage)
         self.imageView.image = self.originalImage
         self.initStates()
@@ -854,7 +593,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         
         // Displays a control that allows the user to choose picture or
         // movie capture, if both are available:
-        //    self.imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        //    self.imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera]
         self.imagePicker?.mediaTypes = [kUTTypeImage as String]
         
         
@@ -862,7 +601,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         // trimming movies. To instead show the controls, use YES.
         self.imagePicker?.allowsEditing = false
         
-        self.imagePicker?.delegate = delegate;
+        self.imagePicker?.delegate = delegate
         
         controller?.presentViewController(self.imagePicker!, animated: true, completion: nil)
         return true
@@ -876,14 +615,14 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         }
         
         self.imagePicker = UIImagePickerController()
-        //    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        self.imagePicker?.sourceType = .PhotoLibrary;
+        //    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum
+        self.imagePicker?.sourceType = .PhotoLibrary
         
         // Displays saved pictures and movies, if both are available, from the
         // Camera Roll album.
         self.imagePicker?.mediaTypes = [kUTTypeImage as String]
         //    [UIImagePickerController availableMediaTypesForSourceType:
-        //     UIImagePickerControllerSourceTypeSavedPhotosAlbum];
+        //     UIImagePickerControllerSourceTypeSavedPhotosAlbum]
         
         // Hides the controls for moving & scaling pictures, or for
         // trimming movies. To instead show the controls, use YES.
@@ -894,6 +633,10 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         controller?.presentViewController(self.imagePicker!, animated: true, completion: nil)
         return true
     }
+    
+    //*********************************************************************************************************
+    // MARK: - UIImagePickerControllerDelegate
+    //*********************************************************************************************************
     
     // For responding to the user tapping Cancel.
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -930,59 +673,55 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
             self.imagePicker?.dismissViewControllerAnimated(true, completion: nil)
             self.imagePicker = nil
             
-            
-            
-            
-//            self.tapOnRect(self)
-//            self.touchState = .Rect
-//            //        self.touchDrawView.drawRectangle(self.touchDrawView.bounds)
-//            //        let fullRect = self.view.bounds
-////            let fullRect = CGRect(origin: CGPointZero, size: CGSizeMake(300, 300))
-//            let fullRect = CGRect(origin: CGPointMake(20, 20), size: CGSizeMake(300, self.touchDrawView.bounds.height+64))
-//            self.grabRect = fullRect
-//            self.touchDrawView.drawRectangle(fullRect)
-////            self.tapOnDoGrabcut(self)
+            // Automatically select a bounding rect (~~view size, can't be complete bounds since GrabCut requires "working room")
             self.autoselectBoundingRect()
+            
+            // Carry out appropriate UI updates automatically (since this is a sequence).
+            self.tapOnMinus(self)
+            self.touchDrawView.touchStarted(CGPointZero)
+            self.touchDrawView.touchEnded(CGPointZero)
+            self.doGrabcutButton.enabled = true
         }
         
         if resizedImage != nil && self.originalImage != nil && resultImage != nil {
 //            print("passed test 4567382")
-            print("passed test 4567382: \(self.originalImage.size)  ||  \(resultImage.size)")
+            if shouldLogDebugOutput { print("passed test 4567382: \(self.originalImage.size)  ||  \(resultImage.size)") }
             
             if self.originalImage.size != resultImage.size {
-                print("passed test gfdsa: \(self.originalImage.size)  ||  \(resultImage.size)")
+                if shouldLogDebugOutput { print("passed test idu261: \(self.originalImage.size)  ||  \(resultImage.size)") }
                 taskBlock()
+                
+                // Automatically perform GrabCut.
+                // Note: This can be disabled to allow labelling before the initial segmentation is performed.
+                self.showLoadingIndicatorView()
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                    repeat {} while self.resultImageView.image == nil
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.hideLoadingIndicatorView()
+                        self.tapOnDoGrabcut(self)
+                    })
+                })
+                
                 return
             }
         }
         
         taskBlock()
         
-        
-        //    _grabRect = [self getTouchedRectWithImageSize:_resizedImage.size];
-        
-        //    _grabRect = [self.view frame];
-        //    [self doGrabcut];
-        //    _touchState = TouchStateRect;
-        self.tapOnRect("nil")
-        
+//        self.tapOnRect("nil")
         
         if (!CGRectIsNull(self.grabRect) && !CGRectIsEmpty(self.grabRect)) {
 //            self.touchState = .Minus // .Plus Or .Minus, either-or
             self.tapOnMinus("nil")
-            NSLog("processing...s");
-            //        [self doGrabcut];
+            NSLog("processing image...")
             self.tapOnDoGrabcut("nil")
         }
     }
     
-    // MARK: - Indicator
-    
-    func CGRectSetOrigin(rect: CGRect, _ origin: CGPoint) -> CGRect {
-        var rect = rect
-        rect.origin = origin
-        return rect
-    }
+    //*********************************************************************************************************
+    // MARK: - Load Indicator
+    //*********************************************************************************************************
     
     func showLoadingIndicatorView() {
         self.showLoadingIndicatorViewWithStyle(.White)
@@ -998,7 +737,7 @@ class ViewController: UIViewController, UINavigationControllerDelegate, UIImageP
         self.view.addSubview(self.dimmedView!)
         
         let spinner: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: activityIndicatorViewStyle)
-        spinner.frame = CGRectSetOrigin(spinner.frame, CGPointMake(floor(CGRectGetMidX(self.view.bounds) - CGRectGetMidX(spinner.bounds)), floor(CGRectGetMidY(self.view.bounds) - CGRectGetMidY(spinner.bounds))));
+        spinner.frame = CGRectSetOrigin(spinner.frame, CGPointMake(floor(CGRectGetMidX(self.view.bounds) - CGRectGetMidX(spinner.bounds)), floor(CGRectGetMidY(self.view.bounds) - CGRectGetMidY(spinner.bounds))))
         spinner.autoresizingMask = [.FlexibleLeftMargin,.FlexibleRightMargin,.FlexibleTopMargin,.FlexibleBottomMargin]
         spinner.startAnimating()
         self.view.addSubview(spinner)

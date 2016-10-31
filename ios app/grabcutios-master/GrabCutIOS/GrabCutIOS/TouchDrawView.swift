@@ -1,9 +1,28 @@
+/*
+ Copyright (c) 2016 Jason Pan
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
 //
 //  TouchDrawView.swift
 //  FIT1041 GrabCut
 //
-//  Created by Jason @ Monash on 22/09/2016.
+//  Created by Jason Pan on 22/09/2016.
 //  Copyright © 2016 Jason Pan. All rights reserved.
+//
+//  Originally written by Eunchul Jeon, Naver Corp.
+//  https://github.com/naver/grabcutios
 //
 
 import UIKit
@@ -17,7 +36,6 @@ import UIKit
 
 @objc public class TouchDrawView: UIView {
     
-//    public var currentState: TouchState!
     public var currentState: TouchState = .None {
         didSet {
 //            if currentState == .Rect {
@@ -27,10 +45,6 @@ import UIKit
 //            }
         }
     }
-    
-//    public func setCurrentState(state: TouchState) {
-//        self.currentState = state
-//    }
     
     var pts: [CGPoint] = [CGPoint](count: 5, repeatedValue: CGPointZero) // we now need to keep track of the four points of a Bezier segment and the first control point of the next segment
     var ctr: UInt!
@@ -138,7 +152,7 @@ import UIKit
             //Draw it
             CGContextFillPath(context)
         }else if self.currentState == .Plus || self.currentState == .Minus {
-//        [_incrementalImage drawInRect:rect];
+//        [_incrementalImage drawInRect:rect]
 //            self.incrementalImage.drawInRect(rect)      // VERIFY
             
             UIColor.whiteColor().setStroke()

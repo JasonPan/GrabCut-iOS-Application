@@ -5,6 +5,69 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
+        <!--Test View Controller-->
+        <scene sceneID="ih0-uS-p32">
+            <objects>
+                <viewController id="90W-OX-YHI" customClass="TestViewController" customModule="FIT1041_GrabCut" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="b4h-oB-bTQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="s2t-OD-HUR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8Go-9t-ise">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="v2_tb2-001.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="Y0j-Id-45r">
+                                <rect key="frame" x="225" y="28" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="4tt-zy-fuC"/>
+                                    <constraint firstAttribute="width" constant="150" id="TU6-H5-dTj"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="v2_tb2-001.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="LdU-Fi-5lr">
+                                <rect key="frame" x="225" y="194" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="9xW-xd-sTI"/>
+                                    <constraint firstAttribute="height" constant="150" id="Bfa-Gt-VMP"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2jE-GZ-A9N">
+                                <rect key="frame" x="249" y="550" width="102" height="30"/>
+                                <state key="normal" title="Perform action"/>
+                                <connections>
+                                    <action selector="test" destination="90W-OX-YHI" eventType="touchUpInside" id="NL3-wU-Nxd"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="v2_tb2-001.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="HeU-a7-y6V">
+                                <rect key="frame" x="225" y="360" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="BDe-6R-fsH"/>
+                                    <constraint firstAttribute="height" constant="150" id="hNI-LQ-cjA"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LdU-Fi-5lr" firstAttribute="centerX" secondItem="8Go-9t-ise" secondAttribute="centerX" id="5RJ-oX-5AV"/>
+                            <constraint firstItem="LdU-Fi-5lr" firstAttribute="top" secondItem="Y0j-Id-45r" secondAttribute="bottom" constant="16" id="H4j-Sl-il9"/>
+                            <constraint firstItem="Y0j-Id-45r" firstAttribute="top" secondItem="b4h-oB-bTQ" secondAttribute="bottom" constant="8" id="Mhl-fM-p4X"/>
+                            <constraint firstItem="2jE-GZ-A9N" firstAttribute="centerX" secondItem="8Go-9t-ise" secondAttribute="centerX" id="Npr-6d-1Tm"/>
+                            <constraint firstItem="HeU-a7-y6V" firstAttribute="centerX" secondItem="8Go-9t-ise" secondAttribute="centerX" id="QjU-Eo-gAM"/>
+                            <constraint firstItem="Y0j-Id-45r" firstAttribute="centerX" secondItem="8Go-9t-ise" secondAttribute="centerX" id="S7k-s1-Meg"/>
+                            <constraint firstItem="s2t-OD-HUR" firstAttribute="top" secondItem="2jE-GZ-A9N" secondAttribute="bottom" constant="20" id="olf-W5-woS"/>
+                            <constraint firstItem="HeU-a7-y6V" firstAttribute="top" secondItem="LdU-Fi-5lr" secondAttribute="bottom" constant="16" id="wBr-QV-xx3"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="maskImageView" destination="LdU-Fi-5lr" id="vfN-ja-Ijo"/>
+                        <outlet property="outputImageView" destination="HeU-a7-y6V" id="4e3-7C-wmB"/>
+                        <outlet property="sourceImageView" destination="Y0j-Id-45r" id="kKZ-S1-bD9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="psR-Cw-whr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="797" y="-490"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -161,9 +224,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="121" y="-52"/>
         </scene>
     </scenes>
     <resources>
         <image name="test.jpg" width="1600" height="1200"/>
+        <image name="v2_tb2-001.jpeg" width="1000" height="1800"/>
     </resources>
 </document>
